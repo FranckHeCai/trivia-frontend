@@ -1,6 +1,8 @@
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import CreateRoom from './components/CreateRoom';
 import JoinRoom from './components/JoinRoom';
+import "./firebase";
+
 // Esto lo haremos luego
 // import Room from './components/Room';
 
