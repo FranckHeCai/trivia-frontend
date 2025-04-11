@@ -1,7 +1,7 @@
 import { initializeApp } from "firebase/app";
 import { getDatabase } from "firebase/database";
 
-console.log("🔥 firebase.js cargado");
+// console.log("🔥 firebase.js cargado");
 
 
 const firebaseConfig = {
@@ -11,7 +11,7 @@ const firebaseConfig = {
   storageBucket: import.meta.env.VITE_PROJECT_ID + ".appspot.com",
   databaseURL: import.meta.env.VITE_DATABASE_URL // 🔥 ESTA LÍNEA ES CLAVE
 };
-alert("🔥 Firebase DB URL:", import.meta.env.VITE_DATABASE_URL);
+// alert("🔥 Firebase DB URL:", import.meta.env.VITE_DATABASE_URL);
 
 const app = initializeApp(firebaseConfig);
 export const db = getDatabase(app);

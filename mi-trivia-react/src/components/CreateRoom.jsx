@@ -17,23 +17,40 @@ export default function CreateRoom() {
   };
 
   const handleCreate = async () => {
-    setLoading(true);
-    const roomCode = generateCode();
-    const roomRef = ref(db, `rooms/${roomCode}`);
-    await set(roomRef, {
-      createdAt: Date.now(),
-      players: [],
-      started: false,
-    });
-    setLoading(false);
-    navigate(`/room/${roomCode}`);
-  };
+  setLoading(true);
+  const roomCode = generateCode();
+  const roomRef = ref(db, `rooms/${roomCode}`);
+
+  const questions = [
+    {
+      question: "¿Cuál es la capital de Francia?",
+      options: ["París", "Madrid", "Roma", "Berlín"],
+      answer: "París"
+    },
+    {
+      question: "¿Qué lenguaje se usa en React?",
+      options: ["Python", "JavaScript", "Ruby", "C#"],
+      answer: "JavaScript"
+    }
+  ];
+
+  await set(roomRef, {
+    createdAt: Date.now(),
+    players: [],
+    started: false,
+    questions: questions
+  });
+
+  setLoading(false);
+  navigate(`/room/${roomCode}`);
+};
+
 
   return (
     <div className="trivia-container">
       <h2>Crear Sala</h2>
       <button onClick={handleCreate} disabled={loading}>
-        {loading ? "Creando..." : "Crear nueva sala"}
+        {loading ? "Creando..." : "Generar preguntas"}
       </button>
     </div>
   );

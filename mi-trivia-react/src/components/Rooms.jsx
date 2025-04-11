@@ -1,41 +1,50 @@
-// src/components/Room.jsx
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { db } from "../firebase";
-import { ref, onValue, update, push } from "firebase/database";
+import { ref, onValue } from "firebase/database";
+
+// Mezclar opciones (Fisher–Yates)
+const shuffleArray = (array) => {
+  const shuffled = [...array];
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+  return shuffled;
+};
 
 export default function Room() {
   const { code } = useParams();
+  const navigate = useNavigate();
+
   const [questions, setQuestions] = useState([]);
   const [current, setCurrent] = useState(0);
   const [selected, setSelected] = useState(null);
   const [score, setScore] = useState(0);
   const [finished, setFinished] = useState(false);
-  const [players, setPlayers] = useState([]);
-  const [userId] = useState(() => Math.random().toString(36).substr(2, 9));
 
+  // Cargar preguntas de Firebase
   useEffect(() => {
     const roomRef = ref(db, `rooms/${code}`);
-
-    // Check if room exists and fetch questions
-    alert(3333)
     onValue(roomRef, (snapshot) => {
-      if (!snapshot.exists()) {
+      const data = snapshot.val();
+      if (!data) {
         alert("La sala no existe.");
         return;
       }
-      const data = snapshot.val();
-      if (data.questions) setQuestions(data.questions);
-      if (data.players) setPlayers(data.players);
+      if (data.questions) {
+        const shuffled = data.questions.map((q) => ({
+          ...q,
+          options: shuffleArray(q.options),
+        }));
+        setQuestions(shuffled);
+      }
     });
-    alert(444)
-
-    // Register current player
-    const playerRef = ref(db, `rooms/${code}/players/${userId}`);
-    update(playerRef, { joinedAt: Date.now() });
-  }, [code, userId]);
+  }, [code]);
 
   const handleAnswer = (option) => {
+    if (selected) return;
+
     setSelected(option);
     const isCorrect = option === questions[current].answer;
     if (isCorrect) setScore(score + 1);
@@ -50,7 +59,7 @@ export default function Room() {
     }, 1000);
   };
 
-  const getClass = (option) => {
+  const getButtonClass = (option) => {
     if (!selected) return "";
     if (option === questions[current].answer) return "correct";
     if (option === selected) return "incorrect";
@@ -61,17 +70,13 @@ export default function Room() {
     <div className="trivia-container">
       <h2>Sala: {code}</h2>
 
-      <div>
-        <h4>Jugadores conectados:</h4>
-        <ul>
-          {Object.keys(players || {}).map((id) => (
-            <li key={id}>👤 {id}</li>
-          ))}
-        </ul>
-      </div>
-
       {finished ? (
-        <p>Juego terminado. Puntos: {score}</p>
+        <div>
+          <p>🎉 Juego terminado. Tu puntuación: {score} / {questions.length}</p>
+          <button onClick={() => navigate("/")} style={{ marginTop: "1rem" }}>
+            Volver al menú
+          </button>
+        </div>
       ) : questions.length > 0 ? (
         <>
           <h3>{questions[current].question}</h3>
@@ -79,8 +84,8 @@ export default function Room() {
             <button
               key={idx}
               onClick={() => handleAnswer(opt)}
+              className={getButtonClass(opt)}
               disabled={selected}
-              className={getClass(opt)}
             >
               {opt}
             </button>

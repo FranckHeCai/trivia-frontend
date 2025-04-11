@@ -1,10 +1,7 @@
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
-import CreateRoom from './components/CreateRoom';
-import JoinRoom from './components/JoinRoom';
-import "./firebase";
-
-// Esto lo haremos luego
-// import Room from './components/Room';
+import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import CreateRoom from "./components/CreateRoom";
+import JoinRoom from "./components/JoinRoom";
+import Room from "./components/Rooms";
 
 export default function App() {
   return (
@@ -13,12 +10,13 @@ export default function App() {
         <h1>🎉 Trivia Multijugador</h1>
 
         <Routes>
+          {/* Página de inicio */}
           <Route
             path="/"
             element={
               <div>
                 <p>Elige una opción:</p>
-                <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center' }}>
+                <div style={{ display: "flex", gap: "1rem", justifyContent: "center", marginTop: "1rem" }}>
                   <Link to="/create">
                     <button>Crear Sala</button>
                   </Link>
@@ -29,10 +27,15 @@ export default function App() {
               </div>
             }
           />
+
+          {/* Crear sala */}
           <Route path="/create" element={<CreateRoom />} />
+
+          {/* Unirse a sala */}
           <Route path="/join" element={<JoinRoom />} />
-          {/* Ruta del juego real, que haremos después */}
-          {/* <Route path="/room/:code" element={<Room />} /> */}
+
+          {/* Sala para jugar */}
+          <Route path="/room/:code" element={<Room />} />
         </Routes>
       </div>
     </Router>
