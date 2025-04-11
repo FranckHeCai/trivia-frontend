@@ -1,3 +1,4 @@
+// src/components/CreateRoom.jsx
 import { useState } from "react";
 import { db } from "../firebase";
 import { ref, set } from "firebase/database";
@@ -5,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 
 export default function CreateRoom() {
   const [loading, setLoading] = useState(false);
+  const [maxPlayers, setMaxPlayers] = useState(4);
   const navigate = useNavigate();
 
   const generateCode = () => {
@@ -17,40 +19,38 @@ export default function CreateRoom() {
   };
 
   const handleCreate = async () => {
-  setLoading(true);
-  const roomCode = generateCode();
-  const roomRef = ref(db, `rooms/${roomCode}`);
+    setLoading(true);
+    const roomCode = generateCode();
+    const roomRef = ref(db, `rooms/${roomCode}`);
 
-  const questions = [
-    {
-      question: "¿Cuál es la capital de Francia?",
-      options: ["París", "Madrid", "Roma", "Berlín"],
-      answer: "París"
-    },
-    {
-      question: "¿Qué lenguaje se usa en React?",
-      options: ["Python", "JavaScript", "Ruby", "C#"],
-      answer: "JavaScript"
-    }
-  ];
+    await set(roomRef, {
+      createdAt: Date.now(),
+      players: {},
+      questions: {},
+      maxPlayers: maxPlayers,
+      started: false,
+    });
 
-  await set(roomRef, {
-    createdAt: Date.now(),
-    players: [],
-    started: false,
-    questions: questions
-  });
-
-  setLoading(false);
-  navigate(`/room/${roomCode}`);
-};
-
+    setLoading(false);
+    navigate(`/room/${roomCode}`);
+  };
 
   return (
     <div className="trivia-container">
       <h2>Crear Sala</h2>
+
+      <label>Máximo de jugadores:</label>
+      <input
+        type="number"
+        value={maxPlayers}
+        onChange={(e) => setMaxPlayers(parseInt(e.target.value))}
+        min={2}
+        max={10}
+        style={{ padding: "10px", borderRadius: "8px", marginBottom: "1rem", width: "100%" }}
+      />
+
       <button onClick={handleCreate} disabled={loading}>
-        {loading ? "Creando..." : "Generar preguntas"}
+        {loading ? "Creando..." : "Crear nueva sala"}
       </button>
     </div>
   );
