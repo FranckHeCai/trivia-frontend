@@ -1,22 +1,13 @@
-import { initializeApp } from 'firebase/app';
-import { getAuth, setPersistence, browserLocalPersistence } from 'firebase/auth';
-import { getFirestore } from 'firebase/firestore';
-import { getStorage } from 'firebase/storage';
-
-export { collection, doc, addDoc, getDoc, setDoc, getDocs, query, updateDoc, deleteDoc, where, onSnapshot, documentId } from "firebase/firestore";
-export { signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, GoogleAuthProvider, signInWithPopup, sendPasswordResetEmail, fetchSignInMethodsForEmail, sendEmailVerification } from "firebase/auth";
-export { uploadBytes, getDownloadURL, ref } from "firebase/storage";
+import { initializeApp } from "firebase/app";
+import { getDatabase } from "firebase/database";
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_API_KEY,
   authDomain: import.meta.env.VITE_PROJECT_ID + '.firebaseapp.com',
   projectId: import.meta.env.VITE_PROJECT_ID,
   storageBucket: import.meta.env.VITE_PROJECT_ID + ".appspot.com",
+  databaseURL: import.meta.env.VITE_DATABASE_URL,
 };
 
-const firebaseApp = initializeApp(firebaseConfig);
-export const db = getFirestore();
-export const auth = getAuth(firebaseApp);
-export const storage = getStorage(firebaseApp);
-// Si descomentas la siguiente línea, cuando mientras que el usuario no se desloguee expresamente o cierre el navegador, permanecerá logueado y podremos acceder a su id desde cualquier página
-setPersistence(auth, browserLocalPersistence);
+const app = initializeApp(firebaseConfig);
+export const db = getDatabase(app);
