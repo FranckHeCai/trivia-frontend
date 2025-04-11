@@ -17,6 +17,8 @@ export default function Room() {
   const [submitted, setSubmitted] = useState(false);
   const [assigned, setAssigned] = useState(null);
   const [assignedQuestion, setAssignedQuestion] = useState(null);
+  const [answered, setAnswered] = useState(false);
+  const [wasCorrect, setWasCorrect] = useState(null);
 
   const userId = `${nickname}-${Math.random().toString(36).substr(2, 5)}`;
 
@@ -57,7 +59,6 @@ export default function Room() {
           [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
         }
 
-        // Asignar a cada jugador la pregunta del siguiente (no la suya)
         for (let i = 0; i < playerIds.length; i++) {
           const current = playerIds[i];
           const next = shuffled[(i + 1) % playerIds.length];
@@ -67,7 +68,6 @@ export default function Room() {
         }
       }
 
-      // Obtener pregunta asignada si ya se asignó
       const currentPlayer = playersInRoom[userId];
       if (currentPlayer && currentPlayer.assignedQuestionId) {
         setAssigned(currentPlayer.assignedQuestionId);
@@ -91,6 +91,12 @@ export default function Room() {
       answer: options[correctIndex],
     });
     setSubmitted(true);
+  };
+
+  const handleAnswer = (selected) => {
+    const isCorrect = selected === assignedQuestion.answer;
+    setWasCorrect(isCorrect);
+    setAnswered(true);
   };
 
   return (
@@ -142,13 +148,29 @@ export default function Room() {
         <p>✅ Pregunta enviada. Esperando asignación...</p>
       ) : null}
 
-      {assignedQuestion && (
+      {assignedQuestion && !answered && (
         <div style={{ marginTop: "2rem" }}>
           <h3>❓ Pregunta para ti:</h3>
           <p>{assignedQuestion.question}</p>
           {assignedQuestion.options.map((opt, idx) => (
-            <button key={idx} style={{ display: "block", margin: "0.5rem 0" }}>{opt}</button>
+            <button
+              key={idx}
+              onClick={() => handleAnswer(opt)}
+              style={{ display: "block", margin: "0.5rem 0" }}
+            >
+              {opt}
+            </button>
           ))}
+        </div>
+      )}
+
+      {answered && (
+        <div style={{ marginTop: "2rem" }}>
+          {wasCorrect ? (
+            <p style={{ color: "green" }}>✅ ¡Correcto!</p>
+          ) : (
+            <p style={{ color: "red" }}>❌ Incorrecto. La respuesta era: <strong>{assignedQuestion.answer}</strong></p>
+          )}
         </div>
       )}
     </div>
