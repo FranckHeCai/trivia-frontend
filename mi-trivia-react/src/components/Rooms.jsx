@@ -47,10 +47,11 @@ export default function Room() {
         });
       }
 
+      // ✅ Asignación automática protegida
       if (
         roomFull &&
         Object.keys(questions).length === data.maxPlayers &&
-        !Object.values(playersInRoom).some((p) => p.assignedQuestionId)
+        !data.assignedDone
       ) {
         const playerIds = Object.keys(playersInRoom);
         const shuffled = [...playerIds];
@@ -62,10 +63,14 @@ export default function Room() {
         for (let i = 0; i < playerIds.length; i++) {
           const current = playerIds[i];
           const next = shuffled[(i + 1) % playerIds.length];
-          update(ref(db, `rooms/${code}/players/${current}`), {
+          await update(ref(db, `rooms/${code}/players/${current}`), {
             assignedQuestionId: next,
           });
         }
+
+        await update(ref(db, `rooms/${code}`), {
+          assignedDone: true,
+        });
       }
 
       const currentPlayer = playersInRoom[userId];
