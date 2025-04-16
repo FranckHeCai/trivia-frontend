@@ -51,8 +51,12 @@ export default function Room() {
       if (
         roomFull &&
         Object.keys(questions).length === data.maxPlayers &&
-        !data.assignedDone
+        !data.assignedDone &&
+        !data.assigning
       ) {
+        await update(ref(db, `rooms/${code}`), { assigning: true });
+        if (Object.keys(playersInRoom).length < data.maxPlayers) return;
+
         const playerIds = Object.keys(playersInRoom);
         const shuffled = [...playerIds];
         for (let i = shuffled.length - 1; i > 0; i--) {
@@ -70,6 +74,7 @@ export default function Room() {
 
         await update(ref(db, `rooms/${code}`), {
           assignedDone: true,
+          assigning: null
         });
       }
 
@@ -88,15 +93,16 @@ export default function Room() {
   };
 
   const handleSubmitQuestion = async () => {
-    if (!question.trim() || options.some((opt) => !opt.trim()) || correctIndex === null) return;
+  if (!question.trim() || options.some((opt) => !opt.trim()) || correctIndex === null) return;
 
-    await update(ref(db, `rooms/${code}/questions/${userId}`), {
-      question,
-      options,
-      answer: options[correctIndex],
-    });
-    setSubmitted(true);
-  };
+  await update(ref(db, `rooms/${code}/questions/${userId}`), {
+    question,
+    options,
+    answer: options[correctIndex],
+  });
+};
+
+
 
   const handleAnswer = (selected) => {
     const isCorrect = selected === assignedQuestion.answer;
@@ -145,7 +151,18 @@ export default function Room() {
             </div>
           ))}
 
-          <button onClick={handleSubmitQuestion} style={{ marginTop: "1rem" }}>Enviar Pregunta</button>
+          <button
+  onClick={() => {
+    setSubmitted(true); // ✅ bloquear ya
+    handleSubmitQuestion();
+  }}
+  style={{ marginTop: "1rem" }}
+  disabled={submitted} // ✅ bloquear doble clic
+>
+  Enviar Pregunta
+</button>
+
+
         </div>
       ) : null}
 
