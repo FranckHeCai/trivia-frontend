@@ -27,6 +27,9 @@ export default function Room() {
   const [totalRounds, setTotalRounds] = useState(0);
   const [score, setScore] = useState({});
 
+  const [timer, setTimer] = useState(15);
+
+
   useEffect(() => {
     const roomRef = ref(db, `rooms/${code}`);
 
@@ -53,14 +56,28 @@ export default function Room() {
       setTotalRounds(data.totalRounds || 0);
       setScore(data.score || {});
 
-      if (!alreadyInRoom && Object.keys(playersInRoom).length < data.maxPlayers) {
-        await update(ref(db, `rooms/${code}/players/${userId}`), {
-          nickname,
-          avatar,
-        });
-      }
-    });
+     if (!alreadyInRoom && Object.keys(playersInRoom).length < data.maxPlayers) {
+  await update(ref(db, `rooms/${code}/players/${userId}`), {
+    nickname,
+    avatar,
+  });
 
+  const scorePath = ref(db, `rooms/${code}/score/${nickname}`);
+  const scoreSnap = await get(scorePath);
+  if (!scoreSnap.exists()) {
+    await update(ref(db, `rooms/${code}/score`), {
+      [nickname]: 0,
+    });
+  }
+}
+      
+
+
+
+      
+    });
+    
+    
     return () => unsubscribe();
   }, [code, nickname, avatar, userId]);
 
@@ -89,30 +106,67 @@ export default function Room() {
     }
   }, [round, currentQuestion, nickname, code, started, totalRounds]);
 
+useEffect(() => {
+  if (!started || round > totalRounds || !currentQuestion) return;
+
+  setTimer(15);
+  const interval = setInterval(() => {
+    setTimer((prev) => {
+      if (prev <= 1) {
+        clearInterval(interval);
+        handleAnswer("__NO_ANSWER__");
+        return 0;
+      }
+      return prev - 1;
+    });
+  }, 1000);
+
+  return () => clearInterval(interval);
+}, [started, round, totalRounds, currentQuestion?.question]);
+
+
+
   const handleOptionChange = (value, index) => {
     const newOptions = [...options];
     newOptions[index] = value;
     setOptions(newOptions);
   };
 
-  const handleAnswer = async (selected) => {
-    if (answered) return;
+const handleAnswer = async (selected) => {
+  const answerRef = ref(db, `rooms/${code}/answers/${round}/${nickname}`);
+  const hasAnswered = (await get(answerRef)).exists();
 
-    const isCorrect = selected === currentQuestion.answer;
-    setWasCorrect(isCorrect);
-    setAnswered(true);
+  if (hasAnswered) {
+    console.log("Respuesta ya registrada, no se vuelve a actualizar");
+    return;
+  }
 
-    await update(ref(db, `rooms/${code}/answers/${round}/${nickname}`), true);
+  // const isCorrect = selected === currentQuestion.answer;
+  // setWasCorrect(isCorrect);
+  // setAnswered(true);
+  const isCorrect = selected === currentQuestion.answer;
+if (selected === "__NO_ANSWER__") {
+  setWasCorrect(false);
+} else {
+  setWasCorrect(isCorrect);
+  setAnswered(true);
+}
 
-    const scoreRef = ref(db, `rooms/${code}/score`);
-    const snapshot = await get(scoreRef);
-    const scores = snapshot.exists() ? snapshot.val() : {};
-    const prev = scores[nickname] || 0;
+  // Marca que ya respondió
+await update(answerRef, { answered: true });
 
-    await update(scoreRef, {
-      [nickname]: isCorrect ? prev + 1 : prev,
-    });
-  };
+  // ✅ Actualizar el score directamente
+  const scorePath = ref(db, `rooms/${code}/score/${nickname}`);
+  const currentScoreSnap = await get(scorePath);
+  const prevScore = currentScoreSnap.exists() ? currentScoreSnap.val() : 0;
+
+  await update(ref(db, `rooms/${code}/score`), {
+    [nickname]: isCorrect ? prevScore + 1 : prevScore,
+  });
+
+  console.log(`${nickname} respondió ${selected}. Correcta: ${isCorrect}`);
+};
+
 
   const handleSubmitQuestion = async () => {
     if (!question.trim() || options.some((opt) => !opt.trim()) || correctIndex === null) return;
@@ -134,8 +188,9 @@ export default function Room() {
   const handleStartGame = async () => {
     const snapshot = await get(ref(db, `rooms/${code}/questions`));
     const allQuestions = snapshot.val() || {};
-    const questionArray = Object.values(allQuestions);
-
+const questionArray = Object.entries(allQuestions)
+  .filter(([key]) => key.includes("-")) // Asegura que sea una pregunta válida
+  .map(([, q]) => q);
     if (questionArray.length === 0) {
       alert("No hay preguntas para iniciar.");
       return;
@@ -147,7 +202,6 @@ export default function Room() {
       started: true,
       round: 1,
       totalRounds: shuffled.length,
-      score: {},
       currentQuestion: shuffled[0],
       questionPool: shuffled,
     });
@@ -177,6 +231,27 @@ export default function Room() {
     setWasCorrect(null);
   };
 
+  const handleRestartGame = async () => {
+  const snapshot = await get(ref(db, `rooms/${code}/questionPool`));
+  const pool = snapshot.val();
+
+  if (!pool || pool.length === 0) {
+    alert("No hay preguntas guardadas.");
+    return;
+  }
+
+  await update(ref(db, `rooms/${code}`), {
+    round: 1,
+    started: true,
+    totalRounds: pool.length,
+    currentQuestion: pool[0],
+    score: {}, // reinicia puntajes
+    answers: {}, // limpia respuestas
+  });
+
+  setAnswered(false);
+  setWasCorrect(null);
+};
   return (
     <div className="trivia-container">
       <h2>Sala: {code}</h2>
@@ -186,7 +261,14 @@ export default function Room() {
           <li key={i}>{p.avatar} {p.nickname}</li>
         ))}
       </ul>
-
+        {Object.keys(score).length > 0 && (
+  <div style={{ marginBottom: "1rem", fontWeight: "bold" }}>
+    🏅 Liderando:{" "}
+    {
+      Object.entries(score).sort(([, a], [, b]) => b - a)[0][0]
+    } con {Object.entries(score).sort(([, a], [, b]) => b - a)[0][1]} punto(s)
+  </div>
+)}
       {!started && roomFull && submittedCount < questionsPerPlayer && (
         <div style={{ marginTop: "2rem" }}>
           <p>Escribe una pregunta:</p>
@@ -235,6 +317,7 @@ export default function Room() {
 
       {started && currentQuestion && !answered && round <= totalRounds && (
         <div style={{ marginTop: "2rem" }}>
+          <p>⏱ Tiempo restante: {timer}s</p>
           <h3>❓ Pregunta (Ronda {round} de {totalRounds}):</h3>
           <p>{currentQuestion.question}</p>
           {currentQuestion.options.map((opt, idx) => (
@@ -262,7 +345,8 @@ export default function Room() {
             <p style={{ color: "green" }}>✅ ¡Correcto!</p>
           ) : (
             <p style={{ color: "red" }}>
-              ❌ Incorrecto. La respuesta era: <strong>{currentQuestion.answer}</strong>
+              ❌ Incorrecto.
+              {/* La respuesta era: <strong>{currentQuestion.answer}</strong> */}
             </p>
           )}
 
@@ -279,6 +363,7 @@ export default function Room() {
           <h2>🏆 Resultados Finales</h2>
           {score && Object.keys(score).length > 0 ? (
             <ul>
+              
               {Object.entries(score)
                 .sort(([, a], [, b]) => b - a)
                 .map(([name, pts], i) => (
@@ -290,6 +375,11 @@ export default function Room() {
           ) : (
             <p>No hay puntuaciones registradas.</p>
           )}
+          {nickname === creator && (
+  <button onClick={handleRestartGame} style={{ marginTop: "1rem" }}>
+    🔄 Repetir partida
+  </button>
+)}
         </div>
       )}
     </div>
