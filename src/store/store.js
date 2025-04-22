@@ -1,6 +1,8 @@
 import { create } from "zustand";
 
 export const useTriviaStore = create ((set) => ({
+  roomPlayers:[],
+  setRoomPlayers: (players) => set({players}),
   player: {
     nickname: "",
     avatar: "cat",

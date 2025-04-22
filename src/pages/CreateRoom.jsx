@@ -1,8 +1,9 @@
 import { useNavigate } from "react-router-dom";
 import { useTriviaStore } from "../store/store";
+import { createRoom, i } from "../services/api";
 
 const CreateRoom = () => {
-  const { room, setRoom } = useTriviaStore(state => state)
+  const { room, setRoom, player, setPlayer } = useTriviaStore(state => state)
   const navigate = useNavigate()
   const generateCode = () => {
     const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
@@ -24,9 +25,15 @@ const CreateRoom = () => {
       maxPlayers: maxPlayers,
       maxQuestions: maxQuestions
     })
-    
+    createRoom({
+      code: roomCode,
+      isReady: false,
+      
+      // maxPlayers: maxPlayers,
+      // maxQuestions: maxQuestions
+
+    })
     navigate(`/lobby/${roomCode}`)
-    
   }
 
   return (

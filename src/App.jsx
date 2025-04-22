@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
@@ -8,6 +8,7 @@ import Welcome from '@/pages/Welcome'
 import CreateRoom from '@/pages/CreateRoom'
 import JoinRoom from "@/pages/JoinRoom"
 import Lobby from './pages/Lobby'
+import { io } from 'socket.io-client'
 
 
 function App() {
