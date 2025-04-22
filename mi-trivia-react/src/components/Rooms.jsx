@@ -4,8 +4,8 @@ import { db } from "../firebase";
 import { ref, onValue, update, get, remove, off } from "firebase/database";
 
 export default function Room() {
-  // Obtener el código de la sala desde la URL
   const navigate = useNavigate();
+  // Obtener el código de la sala desde la URL
   const { code } = useParams();
   // Obtener el nickname y avatar del localStorage
   const [nickname] = useState(localStorage.getItem("nickname"));
