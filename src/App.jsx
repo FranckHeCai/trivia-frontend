@@ -7,12 +7,13 @@ import Error from '@/pages/Error'
 import Welcome from '@/pages/Welcome'
 import CreateRoom from '@/pages/CreateRoom'
 import JoinRoom from "@/pages/JoinRoom"
+import Lobby from './pages/Lobby'
 
 
 function App() {
 
   return (
-    <div className='mx-auto container bg-amber-50'>
+    <div className='bg-amber-500/20'>
         <BrowserRouter>
         <Routes>   
             <Route index element={<Start />} />
@@ -20,7 +21,7 @@ function App() {
             <Route path="/lobby" element={<Welcome />} />
             <Route path="/create-room" element={<CreateRoom />} />
             <Route path="/join-room" element={<JoinRoom />} />
-            
+            <Route path="/lobby/:roomCode" element={<Lobby />} />
             <Route path="*" element={<Error />} />
         </Routes>
     </BrowserRouter>

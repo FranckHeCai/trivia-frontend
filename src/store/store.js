@@ -8,6 +8,19 @@ export const useTriviaStore = create ((set) => ({
     roomId: null
   },
   setPlayer: (player) => set({player}),
+  room: {
+    code: "",
+    isReady: false,
+    maxPlayers: 0,
+    maxQuestions: 0
+  },
+  setRoom: (room) => set({room}),
+  question: {
+    question_text: "",
+    roomId: "",
+    playerId: 0,
+  },
+  setQuestion: (question) => set({question}),
   isPlaying : false,
     currentMusic: {
         playlist : null, song: null, songs: []
