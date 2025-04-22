@@ -1,10 +1,17 @@
 import { useNavigate } from "react-router-dom";
 import { useTriviaStore } from "../store/store";
-import { createRoom, i } from "../services/api";
+import { createRoom} from "../services/api";
+import { useEffect, useState } from "react";
 
 const CreateRoom = () => {
-  const { room, setRoom, player, setPlayer } = useTriviaStore(state => state)
+  const { setRoom, player, setPlayer } = useTriviaStore(state => state)
   const navigate = useNavigate()
+
+  useEffect(() => {
+    setPlayer({...player, roomId: generateCode()})
+  }, [])
+  
+
   const generateCode = () => {
     const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
     let code = "";
@@ -16,9 +23,10 @@ const CreateRoom = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault()
+    const roomCode = generateCode()
+    setPlayer({...player, roomId: roomCode})
     const maxPlayers = Number(event.target.maxPlayers.value)
     const maxQuestions = Number(event.target.maxQuestions.value)
-    const roomCode = generateCode()
     setRoom({
       code: roomCode,
       isReady: false,
@@ -28,12 +36,13 @@ const CreateRoom = () => {
     createRoom({
       code: roomCode,
       isReady: false,
-      
+      player : player
       // maxPlayers: maxPlayers,
       // maxQuestions: maxQuestions
-
     })
+
     navigate(`/lobby/${roomCode}`)
+
   }
 
   return (
@@ -50,6 +59,7 @@ const CreateRoom = () => {
         </div>
         <button className="border-2 border-amber-900 px-8 py-2 text-lg text-white bg-amber-600/80 active:bg-lime-500 active:border-lime-800 rounded">Crear sala</button>
       </form>
+      <button onClick={()=>{console.log(player)}} className="border-2 border-amber-900 px-8 py-2 text-lg text-white bg-amber-600/80 active:bg-lime-500 active:border-lime-800 rounded">Check Player</button>
     </div>
   );
 };

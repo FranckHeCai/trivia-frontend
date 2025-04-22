@@ -12,13 +12,13 @@ export const players = [
     roomId: null
   },
   {
-    nickname: "Jortecs",
+    nickname: "AlonsoGay",
     avatar: "wolf",
     score: 0,
     roomId: null
   },
   {
-    nickname: "Jortecs",
+    nickname: "ArnauFF",
     avatar: "panda",
     score: 0,
     roomId: null
