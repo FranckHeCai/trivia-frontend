@@ -27,7 +27,7 @@ export const useTriviaStore = create (persist((set) => ({
     playerId: 0,
   },
   setQuestion: (question) => set({question}),
-
+  
 }),
  {
         name: 'Trivia Party', // Nombre que se utilizará en el localStorage
