@@ -23,14 +23,13 @@ export default function JoinRoom() {
   return (
     <div className="trivia-container">
       <h2>Unirse a Sala</h2>
-      <input
+      <input className="nickname-input"
         type="text"
         placeholder="Código de sala"
         value={code}
         onChange={(e) => setCode(e.target.value.toUpperCase())}
-        style={{ padding: "10px", borderRadius: "8px", marginBottom: "1rem" }}
       />
-      <button onClick={handleJoin}>Entrar</button>
+      <button className="button" onClick={handleJoin}>Entrar</button>
       {error && <p style={{ color: "red" }}>{error}</p>}
     </div>
   );

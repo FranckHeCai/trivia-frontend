@@ -9,7 +9,7 @@ import Menu from "./components/Menu";
 export default function App() {
   return (
     <Router>
-      <div className="trivia-container">
+      <div className="">
         <Routes>
           {/* Pantalla de inicio: apodo y avatar */}
           <Route path="/" element={<Start />} />

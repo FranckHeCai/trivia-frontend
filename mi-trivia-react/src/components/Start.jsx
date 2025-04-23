@@ -2,7 +2,17 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-const avatars = ["😀", "😎", "🤖", "👽", "🐱", "🐶", "🦄"];
+import '../Start.css';
+
+const avatars = [
+  "/img/bunnyF.png",
+  "/img/cat.png",
+  "/img/dog.png",
+  "/img/frog.png",
+  "/img/pandita.png",
+  "/img/wolf.png",
+  "/img/crocrodilo.png"
+];
 
 export default function Start() {
   const [nickname, setNickname] = useState("");
@@ -25,35 +35,41 @@ export default function Start() {
 
   return (
     <div className="trivia-container">
-      <h1>🎉 Question Party Game</h1>
-      <p>Ingresa tu apodo:</p>
-      <input
+      <h1>Super trivia party</h1>
+      <img className="img" src="./img/bunnyF.png" alt="" />
+      <p>Ingresa tu apodo</p>
+      <input className="nickname-input"
         type="text"
         value={nickname}
         onChange={(e) => setNickname(e.target.value)}
         placeholder="ej: Pablo"
-        style={{ padding: "10px", borderRadius: "8px", marginBottom: "1rem" }}
+        
       />
 
-      <p>Escoge un avatar:</p>
-      <div style={{ display: "flex", gap: "10px", marginBottom: "1rem" }}>
+      <p>Escoge un avatar</p>
+      <div className="avatars-container">
         {avatars.map((a, idx) => (
           <button
             key={idx}
             onClick={() => setAvatar(a)}
-            style={{
-              fontSize: "1.5rem",
-              background: avatar === a ? "lightgreen" : "white",
-              borderRadius: "8px",
-              padding: "0.3rem 0.6rem"
-            }}
-          >
-            {a}
+                className="avatar-selected"
+                    style={{
+      border: avatar === a ? "2px solid #000000" : "1px solid #ccc",
+    }}>
+          <img
+      src={a}
+      alt={`Avatar ${idx}`}
+      style={{
+        width: "50px",
+        height: "50px",
+        objectFit: "contain",
+      }}
+    />
           </button>
         ))}
       </div>
 
-      <button onClick={handleStart}>Entrar al juego</button>
+      <button className="button" onClick={handleStart}>Entrar al juego</button>
     </div>
   );
 }

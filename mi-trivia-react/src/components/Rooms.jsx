@@ -361,24 +361,36 @@ const questionArray = Object.entries(allQuestions)
 // Renderizar la interfaz de la sala
   return (
     <div className="trivia-container">
-      <button onClick={handleLeaveRoom} style={{ float: "left" }}>
+      <button className="button"  onClick={handleLeaveRoom} style={{ float: "left" }}>
   Salir de la sala ❌
 </button><br />
       <h2>Sala: {code}</h2>
       <p>Jugadores conectados ({Object.keys(players).length} / {maxPlayers})</p>
       <ul>
         {Object.values(players).map((p, i) => (
-          <li key={i}>{p.avatar} {p.nickname}</li>
+          <li
+           key={i}> {p.nickname}
+           <img
+    src={avatar}
+    alt="avatar"
+    style={{
+      width: "80px",
+      height: "80px",
+      borderRadius: "50%",
+      objectFit: "cover"
+    }}
+  />
+          </li>
         ))}
       </ul>
 
       
         {Object.keys(score).length > 0 && (
-  <div style={{ marginBottom: "1rem", fontWeight: "bold" }}>
-    🏅 Liderando:{" "}
+  <div >
+    <p>Liderando:{" "}
     {
       Object.entries(score).sort(([, a], [, b]) => b - a)[0][0]
-    } con {Object.entries(score).sort(([, a], [, b]) => b - a)[0][1]} punto(s)
+    } con {Object.entries(score).sort(([, a], [, b]) => b - a)[0][1]} punto(s)</p>
   </div>
   
 )}
@@ -425,7 +437,7 @@ const questionArray = Object.entries(allQuestions)
             </div>
           ))}
 
-          <button onClick={handleSubmitQuestion} style={{ marginTop: "1rem" }}>
+          <button className="button"  onClick={handleSubmitQuestion} style={{ marginTop: "1rem" }}>
             Enviar Pregunta
           </button>
         </div>
@@ -436,7 +448,7 @@ const questionArray = Object.entries(allQuestions)
       )}
 
       {!started && nickname === creator && roomFull && (
-        <button onClick={handleStartGame} style={{ marginTop: "2rem" }}>
+        <button className="button"  onClick={handleStartGame} style={{ marginTop: "2rem" }}>
           🚀 Empezar Partida
         </button>
       )}
@@ -447,7 +459,7 @@ const questionArray = Object.entries(allQuestions)
           <h3>❓ Pregunta (Ronda {round} de {totalRounds}):</h3>
           <p>{currentQuestion.question}</p>
           {currentQuestion.options.map((opt, idx) => (
-            <button
+            <button className="button" 
               key={idx}
               onClick={() => handleAnswer(opt)}
               disabled={answered || currentQuestion.author === userId}
@@ -482,7 +494,7 @@ const questionArray = Object.entries(allQuestions)
           )}
 
           {nickname === creator && (
-            <button onClick={handleNextRound} style={{ marginTop: "1rem" }}>
+            <button className="button"  onClick={handleNextRound} style={{ marginTop: "1rem" }}>
               👉 Siguiente Ronda
             </button>
           )}
@@ -507,7 +519,7 @@ const questionArray = Object.entries(allQuestions)
             <p>No hay puntuaciones registradas.</p>
           )}
           {nickname === creator && (
-  <button onClick={handleRestartGame} style={{ marginTop: "1rem" }}>
+  <button className="button"   onClick={handleRestartGame} style={{ marginTop: "1rem" }}>
     🔄 Repetir partida
   </button>
 )}

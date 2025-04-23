@@ -48,27 +48,25 @@ export default function CreateRoom() {
     <div className="trivia-container">
       <h2>Crear Sala</h2>
 
-      <label>Máximo de jugadores:</label>
-      <input
+      <p>Máximo de jugadores:</p>
+      <input className="nickname-input"
         type="number"
         value={maxPlayers}
         onChange={(e) => setMaxPlayers(parseInt(e.target.value))}
         min={2}
         max={10}
-        style={{ padding: "10px", borderRadius: "8px", marginBottom: "1rem", width: "100%" }}
       />
 
-      <label>Preguntas por jugador:</label>
-      <input
+      <p>Preguntas por jugador:</p>
+      <input className="nickname-input"
         type="number"
         value={questionsPerPlayer}
         onChange={(e) => setQuestionsPerPlayer(parseInt(e.target.value))}
         min={1}
         max={5}
-        style={{ padding: "10px", borderRadius: "8px", marginBottom: "1rem", width: "100%" }}
       />
 
-      <button onClick={handleCreate} disabled={loading}>
+      <button className="button" onClick={handleCreate} disabled={loading}>
         {loading ? "Creando..." : "Crear nueva sala"}
       </button>
     </div>

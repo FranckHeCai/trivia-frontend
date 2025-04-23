@@ -20,14 +20,26 @@ export default function Menu() {
 
   return (
     <div className="trivia-container">
-      <h2>👋 ¡Hola, {nickname}!</h2>
-      <div style={{ fontSize: "2.5rem", marginBottom: "1rem" }}>{avatar}</div>
+      <h2>Bienvenido, {nickname}!</h2>
+      <p>Quien conoce mejor al otro?</p>
+      <div  style={{ marginBottom: "1rem" }}>
+          <img
+    src={avatar}
+    alt="avatar"
+    style={{
+      width: "80px",
+      height: "80px",
+      borderRadius: "50%",
+      objectFit: "cover"
+    }}
+  />
+      </div>
       <div style={{ display: "flex", gap: "1rem", justifyContent: "center" }}>
         <Link to="/create">
-          <button>Crear Sala</button>
+          <button className="button">Crear Sala</button>
         </Link>
         <Link to="/join">
-          <button>Unirse a Sala</button>
+          <button className="button">Unirse a Sala</button>
         </Link>
       </div>
     </div>
