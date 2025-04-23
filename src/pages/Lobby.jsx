@@ -17,23 +17,23 @@ const Lobby = () => {
   useEffect(() => {
     socket.on('connect', () => {
       console.log('connected')
-      socket.on('PlayerHasJoined', (data) => {
-        console.log(data)
+
+      socket.on('fetched-players', (data) => {
+        console.log(111111111,data)
         setRoomPlayers(data)
+        
       })
 
-      socket.on('player-list', (data) => {
-        console.log(data)
-        setRoomPlayers(data)
-      })
+      socket.emit('get-players', roomCode)
+      
     });
 
   }, [])
 
   useEffect(() => {
+    console.log("Updated room players: ", roomPlayers)
   
-  
-  }, [])
+  }, [roomPlayers])
   
   const handleLeave = async() =>{
     deletePlayer({nickname: player.nickname, roomId: roomCode})
@@ -52,20 +52,23 @@ const Lobby = () => {
         <h1 className="text-xl">Código de sala</h1>
         <p className="text-3xl">{roomCode}</p>
       </div>
-      <div>
-        {roomPlayers.map(player => <PlayerCard key={player.nickname} player={player} />)}
-      </div>
       <div className="max-w-xs sm:max-w-xl grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-5">
+        { roomPlayers.length > 0 && roomPlayers.map(player => <PlayerCard key={player.nickname} player={player} />)}
+      </div>
+      {/*<div className="max-w-xs sm:max-w-xl grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-5">
         {
           players.map(player => <PlayerCard key={player.nickname} player={player} />)
         }
-      </div>
+      </div>*/}
       <button onClick={handleLeave} className="border-2 border-amber-900 px-8 py-2 text-lg text-white bg-red-500 active:bg-red-700 active:border-red-800 rounded">
         Salir de sala
       </button>
 
       <button onClick={()=> {console.log(player)}} className="border-2 border-amber-900 px-8 py-2 text-lg text-white bg-red-500 active:bg-red-700 active:border-red-800 rounded">
         get player
+      </button>
+      <button onClick={()=> {console.log(roomPlayers)}} className="border-2 border-amber-900 px-8 py-2 text-lg text-white bg-red-500 active:bg-red-700 active:border-red-800 rounded">
+        get room players
       </button>
 
     </div>

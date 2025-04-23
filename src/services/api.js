@@ -1,8 +1,8 @@
 import axios from 'axios';
 export const i = axios.create({ baseURL: 'http://localhost:3000' });
 
-export const createRoom = room =>{
-  i.post('/rooms', room)
+export const createRoom = async room =>{
+  await i.post('/rooms', room)
 }
 
 export const getRoom = async (roomCode) => {

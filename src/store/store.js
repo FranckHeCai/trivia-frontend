@@ -1,8 +1,10 @@
 import { create } from "zustand";
+import { persist } from 'zustand/middleware'
 
-export const useTriviaStore = create ((set) => ({
+
+export const useTriviaStore = create (persist((set) => ({
   roomPlayers:[],
-  setRoomPlayers: (players) => set({players}),
+  setRoomPlayers: (roomPlayers) => set({roomPlayers}),
   player: {
     nickname: "",
     avatar: "cat",
@@ -23,14 +25,10 @@ export const useTriviaStore = create ((set) => ({
     playerId: 0,
   },
   setQuestion: (question) => set({question}),
-  isPlaying : false,
-    currentMusic: {
-        playlist : null, song: null, songs: []
-    },
-    backgroundColor: "bg-green-600",
-    volume: 0.5,
-    setVolume: (volume) => set({volume}),
-    setBackgroundColor: ({backgroundColor}) => set({backgroundColor}),
-    setIsPlaying: (isPlaying) => set({ isPlaying }),
-    setCurrentMusic: (currentMusic) => set({ currentMusic })
-}))
+
+}),
+ {
+        name: 'Trivia Party', // Nombre que se utilizará en el localStorage
+        partialize: (state) => ({ player: state.player }), // Aquí ponemos lo que se guardará en el localStorage. Es recomendable especificarlo expresamente, porque si no lo hacemos, se guardará todo el contenido de la store en el localStorage, lo cual incluye las funciones de los actions, pero como no podemos guardar una función en el localStorage, daría problemas
+}
+))

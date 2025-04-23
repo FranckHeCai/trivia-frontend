@@ -21,7 +21,7 @@ const CreateRoom = () => {
     return code;
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault()
     const roomCode = generateCode()
     setPlayer({...player, roomId: roomCode})
@@ -33,7 +33,7 @@ const CreateRoom = () => {
       maxPlayers: maxPlayers,
       maxQuestions: maxQuestions
     })
-    createRoom({
+    await createRoom({
       code: roomCode,
       isReady: false,
       player : player
