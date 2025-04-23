@@ -28,3 +28,8 @@ export const deletePlayer = async(player) => {
     }
   )
 }
+
+export const createQuestion = async (question) =>{
+  const newQuestion = await i.post('/questions', question)
+  return newQuestion.data
+}

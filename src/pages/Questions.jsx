@@ -1,6 +1,7 @@
 import { useState } from "react";
 import removeIcon from '../icons/cross.svg'
 import { useParams } from "react-router-dom";
+import { createQuestion } from "../services/api";
 
 const Questions = () => {
   const { roomId } = useParams()
@@ -60,6 +61,10 @@ const Questions = () => {
     // console.log(payload)
     console.log('question: ',collectedQuestion)
     console.log('answers: ',separatedAnswers)
+
+    const newQuestion = await createQuestion(collectedQuestion)
+    const questionId = newQuestion.id
+    console.log('questionId: ', questionId)
     // resetForm();
   };
 
