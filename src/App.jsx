@@ -1,14 +1,11 @@
-import { useEffect, useState } from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import Start from "@/pages/Start"
 import Error from '@/pages/Error'
 import Welcome from '@/pages/Welcome'
 import CreateRoom from '@/pages/CreateRoom'
 import JoinRoom from "@/pages/JoinRoom"
-import Lobby from './pages/Lobby'
-import { io } from 'socket.io-client'
+import Lobby from '@/pages/Lobby'
+import Questions from '@/pages/Questions'
 
 
 function App() {
@@ -22,6 +19,7 @@ function App() {
             <Route path="/lobby" element={<Welcome />} />
             <Route path="/create-room" element={<CreateRoom />} />
             <Route path="/join-room" element={<JoinRoom />} />
+            <Route path="/questions" element={<Questions />} />
             <Route path="/lobby/:roomCode" element={<Lobby />} />
             <Route path="*" element={<Error />} />
         </Routes>
