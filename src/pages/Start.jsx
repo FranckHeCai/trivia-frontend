@@ -14,7 +14,6 @@ const Start = () => {
 
   const handleClick = avatar => {
     setPlayer({...player, avatar: avatar})
-    console.log(player)
   }
 
   const handleSubmit = (event) => {
@@ -33,21 +32,21 @@ const Start = () => {
          handleSubmit(event)
         }} className="flex flex-col items-center p-3 rounded-lg gap-1 border-2 border-amber-950">
           <label className="text-lg">Ingresa tu apodo</label>
-          <input onChange={(event)=>{
+          <input required onChange={(event)=>{
             handleChange(event)
           }} className="mb-2 bg-white p-3 rounded w-full outline-0 focus:outline-2 focus:outline-amber-900 text-center" type="text" />
           <label className="font-extralight">Escoge un avatar</label>
           <div className="grid gap-2 sm:grid-cols-6 md:grid-cols-8 grid-cols-4 mb-2">
             {avatars.map(avatar => {
               return(
-                <button onClick={()=>{ handleClick(avatar) }} className={`rounded-md ${ player.avatar === avatar ? "outline-3" : ""} overflow-hidden cursor-pointer`} key={avatar}>
+                <button type="button" onClick={()=>{ handleClick(avatar) }} className={`rounded-md ${ player.avatar === avatar ? "outline-3" : ""} overflow-hidden cursor-pointer`} key={avatar}>
                   <img className="scale-115 object-cover"  src={`avatars/${avatar}.svg`} alt={`${avatar} avatar`} />
                 </button>
               )
             })}
           </div>
           { isNicknameComplete &&
-            <button className="border-2 border-amber-900 px-8 py-2 text-lg text-white bg-amber-600/80 active:bg-lime-500 active:border-lime-800 rounded">
+            <button type="submit" className="border-2 border-amber-900 px-8 py-2 text-lg text-white bg-amber-600/80 active:bg-lime-500 active:border-lime-800 rounded">
               Play
             </button>
           }

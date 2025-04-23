@@ -24,23 +24,24 @@ const CreateRoom = () => {
   const handleSubmit = async (event) => {
     event.preventDefault()
     const roomCode = generateCode()
-    setPlayer({...player, roomId: roomCode})
+    await setPlayer({...player, roomId: roomCode})
     const maxPlayers = Number(event.target.maxPlayers.value)
     const maxQuestions = Number(event.target.maxQuestions.value)
-    setRoom({
+    await setRoom({
       code: roomCode,
       isReady: false,
       maxPlayers: maxPlayers,
       maxQuestions: maxQuestions
     })
-    await createRoom({
+    const createdRoom = await createRoom({
       code: roomCode,
       isReady: false,
-      player : player
-      // maxPlayers: maxPlayers,
-      // maxQuestions: maxQuestions
+      player : player,
+      maxPlayers: maxPlayers,
+      maxQuestions: maxQuestions,
     })
-
+    console.log("Id del player: ", createdRoom)
+    await setPlayer({...player, id: createdRoom.id})
     navigate(`/lobby/${roomCode}`)
 
   }

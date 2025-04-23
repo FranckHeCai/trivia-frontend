@@ -2,7 +2,8 @@ import axios from 'axios';
 export const i = axios.create({ baseURL: 'http://localhost:3000' });
 
 export const createRoom = async room =>{
-  await i.post('/rooms', room)
+  const createdRoom = await i.post('/rooms', room)
+  return createdRoom.data
 }
 
 export const getRoom = async (roomCode) => {
@@ -10,8 +11,14 @@ export const getRoom = async (roomCode) => {
  return room.data
 }
 
-export const createPlayer = player => {
-  i.post('/players', player)
+export const getPlayers = async (roomCode) => {
+  const players = await i.get(`/players/${roomCode}`)
+ return players.data
+}
+
+export const createPlayer = async (player) => {
+  const createdPlayer = await i.post('/players', player)
+  return createdPlayer.data
 }
 
 export const deletePlayer = async(player) => {

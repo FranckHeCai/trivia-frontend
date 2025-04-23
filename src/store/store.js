@@ -6,10 +6,12 @@ export const useTriviaStore = create (persist((set) => ({
   roomPlayers:[],
   setRoomPlayers: (roomPlayers) => set({roomPlayers}),
   player: {
+    id: null,
     nickname: "",
     avatar: "cat",
     score: 0,
-    roomId: null
+    roomId: null,
+    
   },
   setPlayer: (player) => set({player}),
   room: {

@@ -1,18 +1,20 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { createPlayer, deletePlayer, getRoom } from "../services/api";
+import { createPlayer, deletePlayer, getPlayers, getRoom } from "../services/api";
 import { useTriviaStore } from "../store/store";
 
 const JoinRoom = () => {
   const { player, setPlayer } = useTriviaStore(state => state)
   const [code, setCode] = useState("")
   const [roomExists, setRoomExists] = useState(false)
+  const [roomFull, setRoomFull] = useState(false)
 
   const navigate = useNavigate()
   
   const handleChange = event =>{
     setCode(event.target.value)
     setPlayer({...player, roomId: event.target.value})
+    setRoomFull(false)
     setRoomExists(false)
   }
 
@@ -23,8 +25,19 @@ const JoinRoom = () => {
       setRoomExists(true)
     } else {
       setRoomExists(false)
-      createPlayer({nickname: player.nickname, avatar: player.avatar, score: player.score, roomId: code})
-      navigate(`/lobby/${code}`)
+      const room = await getRoom(code)
+      const players = await getPlayers(code)
+      const maxPlayers = room[0].maxPlayers
+      const currentPlayers = players.length
+      if(currentPlayers<maxPlayers){
+        setRoomFull(false)
+         const newPLayer = await createPlayer({nickname: player.nickname, avatar: player.avatar, score: player.score, roomId: code})
+        await setPlayer({...player, id: newPLayer.id})
+        navigate(`/lobby/${code}`)
+      }else{
+        setRoomFull(true)
+      }
+      
     }
   }
 
@@ -48,6 +61,10 @@ const JoinRoom = () => {
           {
             roomExists && 
           <span className="text-lg text-red-500">La sala no existe!</span>
+          }
+          {
+            roomFull && 
+          <span className="text-lg text-red-500">La sala esta llena!</span>
           }
         </div>
         <button className="border-2 border-amber-900 px-8 py-2 text-lg text-white bg-amber-600/80 active:bg-lime-500 active:border-lime-800 rounded">Unirse a sala</button>

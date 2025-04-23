@@ -19,9 +19,7 @@ const Lobby = () => {
       console.log('connected')
 
       socket.on('fetched-players', (data) => {
-        console.log(111111111,data)
         setRoomPlayers(data)
-        
       })
 
       socket.emit('get-players', roomCode)
