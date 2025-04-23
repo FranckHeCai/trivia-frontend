@@ -19,7 +19,7 @@ function App() {
             <Route path="/lobby" element={<Welcome />} />
             <Route path="/create-room" element={<CreateRoom />} />
             <Route path="/join-room" element={<JoinRoom />} />
-            <Route path="/questions" element={<Questions />} />
+            <Route path="/questions/:roomId" element={<Questions />} />
             <Route path="/lobby/:roomCode" element={<Lobby />} />
             <Route path="*" element={<Error />} />
         </Routes>
