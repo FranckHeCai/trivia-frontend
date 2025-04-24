@@ -8,7 +8,7 @@ export const createRoom = async room =>{
 
 export const getRoom = async (roomCode) => {
   const room = await i.get(`/rooms/${roomCode}`)
- return room.data
+  return room.data
 }
 
 export const getPlayers = async (roomCode) => {
