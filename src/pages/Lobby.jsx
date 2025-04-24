@@ -1,5 +1,4 @@
 import { useNavigate, useParams } from "react-router-dom";
-import { players } from "../mock/player";
 import PlayerCard from "../components/PlayerCard";
 import { io } from "socket.io-client";
 import { useTriviaStore } from "../store/store";
@@ -7,7 +6,7 @@ import { useEffect } from "react";
 import {deletePlayer} from '../services/api';
 
 const Lobby = () => {
-  const { roomPlayers, setRoomPlayers, player } = useTriviaStore(state => state)
+  const { roomPlayers, setRoomPlayers, player, setPlayer } = useTriviaStore(state => state)
   const { roomCode } = useParams()
   
   const navigate = useNavigate()
@@ -44,6 +43,12 @@ const Lobby = () => {
     }
   }
 
+  const handleNext = async() => {
+    console.log('redirecting...')
+    await setPlayer({...player, roomId: roomCode})
+    navigate(`/questions/${roomCode}`)
+  }
+
   return (
     <div className="w-full h-screen flex flex-col gap-5 justify-center items-center">
       <div className="text-center">
@@ -68,7 +73,9 @@ const Lobby = () => {
       <button onClick={()=> {console.log(roomPlayers)}} className="border-2 border-amber-900 px-8 py-2 text-lg text-white bg-red-500 active:bg-red-700 active:border-red-800 rounded">
         get room players
       </button>
-
+      <button onClick={handleNext} className="border-2 border-amber-900 px-8 py-2 text-lg text-white bg-red-500 active:bg-red-700 active:border-red-800 rounded">
+        next
+      </button>
     </div>
   );
 };

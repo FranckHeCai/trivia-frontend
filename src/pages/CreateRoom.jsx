@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useTriviaStore } from "../store/store";
 import { createRoom} from "../services/api";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 const CreateRoom = () => {
   const { setRoom, player, setPlayer } = useTriviaStore(state => state)
@@ -24,7 +24,7 @@ const CreateRoom = () => {
   const handleSubmit = async (event) => {
     event.preventDefault()
     const roomCode = generateCode()
-    await setPlayer({...player, roomId: roomCode})
+    
     const maxPlayers = Number(event.target.maxPlayers.value)
     const maxQuestions = Number(event.target.maxQuestions.value)
     await setRoom({
@@ -41,7 +41,7 @@ const CreateRoom = () => {
       maxQuestions: maxQuestions,
     })
     console.log("Id del player: ", createdRoom)
-    await setPlayer({...player, id: createdRoom.id})
+    await setPlayer({...player, id: createdRoom.id, roomId: roomCode})
     navigate(`/lobby/${roomCode}`)
 
   }

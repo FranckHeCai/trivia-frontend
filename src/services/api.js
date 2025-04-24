@@ -33,3 +33,7 @@ export const createQuestion = async (question) =>{
   const newQuestion = await i.post('/questions', question)
   return newQuestion.data
 }
+
+export const createAnswer = (answer) => {
+  return i.post('/answers', answer)
+}

@@ -1,14 +1,21 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import removeIcon from '../icons/cross.svg'
 import { useParams } from "react-router-dom";
-import { createQuestion } from "../services/api";
+import { createAnswer, createQuestion } from "../services/api";
+import { useTriviaStore } from "../store/store";
 
 const Questions = () => {
   const { roomId } = useParams()
+  const { player } = useTriviaStore(state => state)
   const [type, setType] = useState("multiple");
   const [question, setQuestion] = useState("");
   const [answers, setAnswers] = useState(["", ""]);
   const [correctIndex, setCorrectIndex] = useState(null);
+
+  useEffect(() => {
+    console.log(player)
+  }, [])
+  
 
   const handleAnswerChange = (value, index) => {
     const updated = [...answers];
@@ -47,25 +54,36 @@ const Questions = () => {
     const collectedQuestion = {
       question_text: trimmedQuestion,
       roomId: roomId,
+      playerId: player.id
     }
+
+    
+
+    // console.log(payload)
+    console.log('question: ',collectedQuestion)
+
+
+    const newQuestion = await createQuestion(collectedQuestion)
+    console.log('question created successfully')
+    const questionId = newQuestion.id
 
     const separatedAnswers = filledAnswers.map((answer, index) => {
       const isCorrect = index === correctIndex
      const answerObject = {
         answer_text: answer,
-        is_correct: isCorrect
+        is_correct: isCorrect,
+        questionId: questionId
       }
       return answerObject
     })
+    
+    Promise.all(separatedAnswers.map(answer => createAnswer(answer)))
+    .then((response)=> {
+      response.map(answer => {console.log('created answer: ', answer.data)})
+    })
+    .catch(error => {console.error('Error creating answers: ', error)})
 
-    // console.log(payload)
-    console.log('question: ',collectedQuestion)
-    console.log('answers: ',separatedAnswers)
-
-    const newQuestion = await createQuestion(collectedQuestion)
-    const questionId = newQuestion.id
-    console.log('questionId: ', questionId)
-    // resetForm();
+    resetForm();
   };
 
   const resetForm = () => {
