@@ -21,7 +21,8 @@ export default function Menu() {
   return (
     <div className="trivia-container">
       <h2>Bienvenido, {nickname}!</h2>
-      <p>Quien conoce mejor al otro?</p>
+      <p>Quien conoce mejor a quien? Reta a tus amigos creando una sala o uniendote a una.</p>
+      {avatar && (
       <div  style={{ marginBottom: "1rem" }}>
           <img
     src={avatar}
@@ -33,7 +34,7 @@ export default function Menu() {
       objectFit: "cover"
     }}
   />
-      </div>
+ </div>)}
       <div style={{ display: "flex", gap: "1rem", justifyContent: "center" }}>
         <Link to="/create">
           <button className="button">Crear Sala</button>

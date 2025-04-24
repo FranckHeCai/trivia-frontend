@@ -23,6 +23,7 @@ export default function JoinRoom() {
   return (
     <div className="trivia-container">
       <h2>Unirse a Sala</h2>
+      <p>Código de la sala</p>
       <input className="nickname-input"
         type="text"
         placeholder="Código de sala"

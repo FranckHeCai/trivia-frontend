@@ -367,22 +367,32 @@ const questionArray = Object.entries(allQuestions)
       <h2>Sala: {code}</h2>
       <p>Jugadores conectados ({Object.keys(players).length} / {maxPlayers})</p>
       <ul>
-        {Object.values(players).map((p, i) => (
-          <li
-           key={i}> {p.nickname}
-           <img
-    src={avatar}
-    alt="avatar"
-    style={{
-      width: "80px",
-      height: "80px",
-      borderRadius: "50%",
-      objectFit: "cover"
-    }}
-  />
-          </li>
-        ))}
-      </ul>
+  {Object.values(players).map((p, i) => (
+    <li
+      key={i}
+      style={{
+        display: "flex",
+        alignItems: "center",
+        gap: "10px",
+        marginBottom: "10px"
+      }}
+    >
+      <img
+        src={p.avatar}
+        alt={p.nickname}
+        style={{
+          width: "60px",
+          height: "60px",
+          borderRadius: "50%",
+          objectFit: "cover"
+        }}
+      />
+      <span style={{  fontSize: "1.1rem" }}>
+        {p.nickname}
+      </span>
+    </li>
+  ))}
+</ul>
 
       
         {Object.keys(score).length > 0 && (

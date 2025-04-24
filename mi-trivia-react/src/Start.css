@@ -41,11 +41,24 @@ h2{
   font-style: normal;
   font-size: 30px;
 }
+h3{
+  font-family: "Lilita One", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 25px;
+}
+h4{
+  font-family: "Lilita One", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 20px;
+}
 .button{
   background-color: #e78929;
   color: #ffffff;
   border: none;
   padding: 10px 20px;
+  margin-bottom: 20px;
   font-size: 20px;
   font-family: "Lilita One", sans-serif;
   cursor: pointer;
@@ -62,7 +75,7 @@ h2{
   background-color: #29e739;
 }
 .nickname-input {
-  width: 580px;
+  width: 400px;
   padding: 10px;
   font-size: 20px;
   font-family: "Lilita One", sans-serif;
@@ -73,8 +86,8 @@ h2{
 .img{
   width: 300px;
   height: 300px;
-  /* border-radius: 50%; */
-  /* border: 2px solid #e78929; */
+  border-radius: 10%;
+  border: 4px solid #e78929;
 }
 .avatar-selected{
   border-radius: 8px;

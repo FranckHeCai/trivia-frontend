@@ -46,7 +46,7 @@ export default function CreateRoom() {
 
   return (
     <div className="trivia-container">
-      <h2>Crear Sala</h2>
+      <h2>Configuración de la Sala</h2>
 
       <p>Máximo de jugadores:</p>
       <input className="nickname-input"
@@ -66,7 +66,7 @@ export default function CreateRoom() {
         max={5}
       />
 
-      <button className="button" onClick={handleCreate} disabled={loading}>
+      <button className="button" onClick={handleCreate} disabled={loading} style={{ marginTop: "1rem", width: "420px", padding: "20px" }}>
         {loading ? "Creando..." : "Crear nueva sala"}
       </button>
     </div>

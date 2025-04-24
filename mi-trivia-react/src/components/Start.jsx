@@ -11,7 +11,8 @@ const avatars = [
   "/img/frog.png",
   "/img/pandita.png",
   "/img/wolf.png",
-  "/img/crocrodilo.png"
+  "/img/crocrodilo.png",
+  "/img/TOROE.png",
 ];
 
 export default function Start() {
@@ -36,7 +37,7 @@ export default function Start() {
   return (
     <div className="trivia-container">
       <h1>Super trivia party</h1>
-      <img className="img" src="./img/bunnyF.png" alt="" />
+      <img className="img" src="./img/reales.jpg" alt="" />
       <p>Ingresa tu apodo</p>
       <input className="nickname-input"
         type="text"
@@ -54,17 +55,23 @@ export default function Start() {
             onClick={() => setAvatar(a)}
                 className="avatar-selected"
                     style={{
-      border: avatar === a ? "2px solid #000000" : "1px solid #ccc",
-    }}>
-          <img
-      src={a}
-      alt={`Avatar ${idx}`}
-      style={{
-        width: "50px",
-        height: "50px",
-        objectFit: "contain",
-      }}
-    />
+    border: avatar === a ? "3px solid black" : "none",
+    background: "transparent",
+    padding: "0",
+    borderRadius: "10px",
+    cursor: "pointer"
+  }}>
+            <img
+    src={a}
+    alt={`Avatar ${idx}`}
+    style={{
+      display: "block",
+      width: "60px",
+      height: "60px",
+      borderRadius: "10px",
+      objectFit: "cover"
+    }}
+  />
           </button>
         ))}
       </div>
