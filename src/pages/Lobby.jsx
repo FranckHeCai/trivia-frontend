@@ -2,45 +2,75 @@ import { useNavigate, useParams } from "react-router-dom";
 import PlayerCard from "../components/PlayerCard";
 import { io } from "socket.io-client";
 import { useTriviaStore } from "../store/store";
-import { useEffect } from "react";
-import {deletePlayer} from '../services/api';
-
+import { useEffect, useRef, useState } from "react";
+import {deletePlayer, getRoom} from '../services/api';
+const socket = io('http://localhost:3000');
 const Lobby = () => {
+  const socketRef = useRef()
+  if (!socketRef.current) {
+    socketRef.current = io('http://localhost:3000')
+  }
+  const socket = socketRef.current;
   const { roomPlayers, setRoomPlayers, player, setPlayer } = useTriviaStore(state => state)
   const { roomCode } = useParams()
-  
+  const [maxPlayers, setMaxPlayers] = useState(null)
   const navigate = useNavigate()
-
-  const socket = io('http://localhost:3000');
+  
+  const setup = async () => {
+    await setPlayer({...player, isReady: false})
+    const roomData = await getRoom(roomCode)
+    const maxPlayers = roomData[0].maxPlayers
+    console.log("max players: ", maxPlayers)
+    setMaxPlayers(maxPlayers)
+  }
 
   useEffect(() => {
+    setup()
+
     socket.on('connect', () => {
       console.log('connected')
 
-      socket.on('fetched-players', (data) => {
+      socket.on('playerHasJoined', (data) => {
         setRoomPlayers(data)
       })
 
-      socket.emit('get-players', roomCode)
+      socket.on('playerHasLeft', (data) => {
+        setRoomPlayers(data)
+      })
+
+      socket.on('allPlayersReady', () => {
+        console.log("all players are ready")
+        navigate(`/questions/${roomCode}`)
+      })
+
+      socket.emit('playerJoins', roomCode)
       
     });
 
-  }, [])
+  return () => {
+    socket.off('connect')
+    socket.off('playerHasJoined')
+    socket.off('playerHasLeft')
+    socket.off('allPlayersReady')
+  }
+
+  }, [roomCode])
 
   useEffect(() => {
     console.log("Updated room players: ", roomPlayers)
-  
   }, [roomPlayers])
   
   const handleLeave = async() =>{
-    deletePlayer({nickname: player.nickname, roomId: roomCode})
-    navigate('/welcome')
-    try {
-      await deletePlayer({ nickname: player.nickname, roomId: roomCode });
-      navigate('/welcome');
-    } catch (err) {
-      console.error("Network/server error:", err);
-    }
+     socket.emit("playerLeaves", {roomId: roomCode, playerId: player.id, nickname: player.nickname})
+     navigate("/welcome")
+    // deletePlayer({nickname: player.nickname, roomId: roomCode})
+    // navigate('/welcome')
+    // try {
+    //   await deletePlayer({ nickname: player.nickname, roomId: roomCode });
+    //   navigate('/welcome');
+    // } catch (err) {
+    //   console.error("Network/server error:", err);
+    // }
   }
 
   const handleNext = async() => {
@@ -49,11 +79,24 @@ const Lobby = () => {
     navigate(`/questions/${roomCode}`)
   }
 
+  const handleReady = async () =>{
+    console.log('player is ready')
+    await setPlayer({...player, isReady: true})
+    socket.emit('playerIsReady', {roomId: roomCode, playerId:  player.id})
+  }
+
+  const handleNotReady = async () =>{
+    console.log('player is not ready')
+    await setPlayer({...player, isReady: false})
+    socket.emit('playerNotReady', {roomId: roomCode, playerId:  player.id})
+  }
+
   return (
     <div className="w-full h-screen flex flex-col gap-5 justify-center items-center">
-      <div className="text-center">
-        <h1 className="text-xl">Código de sala</h1>
-        <p className="text-3xl">{roomCode}</p>
+      <div className="w-full sm:w-sm">
+        <h1 className="text-xl text-center">Código de sala</h1>
+        <p className="text-3xl text-center">{roomCode}</p>
+        <p className="text-md">jugadores en sala: {roomPlayers.length}/{maxPlayers}</p>
       </div>
       <div className="max-w-xs sm:max-w-xl grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-5">
         { roomPlayers.length > 0 && roomPlayers.map(player => <PlayerCard key={player.nickname} player={player} />)}
@@ -70,8 +113,14 @@ const Lobby = () => {
       <button onClick={()=> {console.log(player)}} className="border-2 border-amber-900 px-8 py-2 text-lg text-white bg-red-500 active:bg-red-700 active:border-red-800 rounded">
         get player
       </button>
-      <button onClick={()=> {console.log(roomPlayers)}} className="border-2 border-amber-900 px-8 py-2 text-lg text-white bg-red-500 active:bg-red-700 active:border-red-800 rounded">
-        get room players
+      <button onClick={()=>{
+        if(player.isReady){
+          handleNotReady()
+        }else{
+          handleReady()
+        }
+      }} className={`border-2 border-amber-900 px-8 py-2 text-lg text-white ${player.isReady ? "bg-emerald-500 active:bg-emerald-700 active:border-emerald-800" : "bg-red-500 active:bg-red-700 active:border-red-800"}   rounded`}>
+        {player.isReady ? "Ready" : "Not ready"}
       </button>
       <button onClick={handleNext} className="border-2 border-amber-900 px-8 py-2 text-lg text-white bg-red-500 active:bg-red-700 active:border-red-800 rounded">
         next

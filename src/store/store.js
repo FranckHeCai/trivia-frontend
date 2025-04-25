@@ -9,6 +9,7 @@ export const useTriviaStore = create (persist((set) => ({
     id: null,
     nickname: "",
     avatar: "cat",
+    isReady: false,
     score: 0,
     roomId: null,
     

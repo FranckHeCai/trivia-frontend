@@ -207,7 +207,7 @@ const Questions = () => {
         )
         : (
           <div className="p-2 sm:p-5 w-full  sm:w-md rounded-xl shadow bg-white">
-        <h2>Max number of question reached</h2>
+        <h2>Has creado todas tus preguntas, esperando a los otros jugadores...</h2>
       </div>
         )
       }
