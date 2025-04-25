@@ -329,6 +329,7 @@ const questionArray = Object.entries(allQuestions)
     await update(ref(db, `rooms/${code}`), {
       currentQuestion: pool[nextRound - 1],
       round: nextRound,
+      
     });
 
     setAnswered(false);

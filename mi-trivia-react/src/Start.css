@@ -96,4 +96,8 @@ h4{
   cursor: pointer;
   margin: 3px;
 }
+::placeholder {
 
+  font-family: "Lilita One", sans-serif;  
+
+}
