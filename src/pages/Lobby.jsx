@@ -38,8 +38,9 @@ const Lobby = () => {
         setRoomPlayers(data)
       })
 
-      socket.on('allPlayersReady', () => {
+      socket.on('allPlayersReady', async () => {
         console.log("all players are ready")
+        await handleNotReady()
         navigate(`/questions/${roomCode}`)
       })
 

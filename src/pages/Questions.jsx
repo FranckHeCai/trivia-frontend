@@ -1,28 +1,62 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import removeIcon from '../icons/cross.svg'
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { createAnswer, createQuestion, getRoom } from "../services/api";
 import { useTriviaStore } from "../store/store";
+import {io} from 'socket.io-client';
 
 const Questions = () => {
   const { roomId } = useParams()
-  const { player } = useTriviaStore(state => state)
+  const { player, setPlayer } = useTriviaStore(state => state)
   const [type, setType] = useState("multiple");
   const [question, setQuestion] = useState("");
   const [createdQuestions, setCreatedQuestions] = useState([])
   const [answers, setAnswers] = useState(["", ""]);
   const [correctIndex, setCorrectIndex] = useState(null);
   const [maxQuestions, setMaxQuestions] = useState(null)
+  const navigate = useNavigate()
 
+  const socketRef = useRef()
+  if (!socketRef.current) {
+    socketRef.current = io('http://localhost:3000')
+  }
+  const socket = socketRef.current;
 
   useEffect(() => {
-    getRoomMaxQuestion(roomId)
+    getRoomMaxQuestion(roomId);
+    socket.on('connect', () => {
+      console.log('question page connected');
+
+      socket.on('allPlayersReady', async () => {
+        console.log('allPlayersReady event received');
+        await handleNotReady();
+        navigate(`/game/${roomId}`);
+      });
+
+      socket.emit('playerJoins', roomId)
+    });
+    
+    return () => {
+      socket.off('allPlayersReady'); // Clean up listener
+    };
   }, [])
 
   useEffect(() => {
     console.log('max questions per player: ', maxQuestions)
-  }, [maxQuestions])
-  
+  }, [maxQuestions]) 
+
+  const handleNotReady = async () =>{
+    console.log('player is not ready')
+    await setPlayer({...player, isReady: false})
+    socket.emit('playerNotReady', {roomId, playerId:  player.id})
+  }
+
+  const handleReady = async () =>{
+    console.log('player is ready')
+    await setPlayer({...player, isReady: true})
+    socket.emit('playerIsReady', {roomId, playerId:  player.id})
+  }
+
   const getRoomMaxQuestion = async (roomCode) => {
     const room = await getRoom(roomCode)
     const fetchedMaxQuestions = room[0].maxQuestions
@@ -107,7 +141,7 @@ const Questions = () => {
   };
 
   return (
-    <div className="p-2 flex w-full h-screen items-center justify-center">
+    <div className="p-2 flex flex-col gap-5 w-full h-screen items-center justify-center">
       
       
       {createdQuestions.length < maxQuestions 
@@ -211,6 +245,16 @@ const Questions = () => {
       </div>
         )
       }
+
+      <button onClick={()=>{
+        if(player.isReady){
+          handleNotReady()
+        }else{
+          handleReady()
+        }
+      }} className={`border-2 border-amber-900 px-8 py-2 text-lg text-white ${player.isReady ? "bg-emerald-500 active:bg-emerald-700 active:border-emerald-800" : "bg-red-500 active:bg-red-700 active:border-red-800"}   rounded`}>
+        {player.isReady ? "Ready" : "Not ready"}
+      </button>
     </div>
   );
 };
