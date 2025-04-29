@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { createPlayer, deletePlayer, getPlayers, getRoom } from "../services/api";
+import { createPlayer, getPlayers, getRoom } from "../services/api";
 import { useTriviaStore } from "../store/store";
 
 const JoinRoom = () => {
-  const { player, setPlayer } = useTriviaStore(state => state)
+  const { player, setPlayer, setRoom } = useTriviaStore(state => state)
   const [code, setCode] = useState("")
   const [roomExists, setRoomExists] = useState(false)
   const [roomFull, setRoomFull] = useState(false)
@@ -26,13 +26,15 @@ const JoinRoom = () => {
     } else {
       setRoomExists(false)
       const room = await getRoom(code)
+      const roomInfo = room[0]
       const players = await getPlayers(code)
-      const maxPlayers = room[0].maxPlayers
+      const maxPlayers = roomInfo.maxPlayers
       const currentPlayers = players.length
       if(currentPlayers<maxPlayers){
         setRoomFull(false)
          const newPLayer = await createPlayer({nickname: player.nickname, avatar: player.avatar, score: player.score, roomId: code})
         await setPlayer({...player, id: newPLayer.id})
+        await setRoom({room})
         navigate(`/lobby/${code}`)
       }else{
         setRoomFull(true)

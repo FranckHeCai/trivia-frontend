@@ -7,7 +7,7 @@ import {io} from 'socket.io-client';
 
 const Questions = () => {
   const { roomId } = useParams()
-  const { player, setPlayer } = useTriviaStore(state => state)
+  const { player, setPlayer, room } = useTriviaStore(state => state)
   const [type, setType] = useState("multiple");
   const [question, setQuestion] = useState("");
   const [createdQuestions, setCreatedQuestions] = useState([])
@@ -42,8 +42,8 @@ const Questions = () => {
   }, [])
 
   useEffect(() => {
-    console.log('max questions per player: ', maxQuestions)
-  }, [maxQuestions]) 
+    console.log('max questions per player: ', room.maxQuestions)
+  }, []) 
 
   const handleNotReady = async () =>{
     console.log('player is not ready')
@@ -144,7 +144,7 @@ const Questions = () => {
     <div className="p-2 flex flex-col gap-5 w-full h-screen items-center justify-center">
       
       
-      {createdQuestions.length < maxQuestions 
+      {createdQuestions.length < room.maxQuestions 
         ? (
         <div className="p-2 sm:p-5 w-full  sm:w-md rounded-xl shadow bg-white">
           <h2 className="text-xl font-bold text-center">Crea una pregunta</h2>

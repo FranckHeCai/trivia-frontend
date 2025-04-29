@@ -31,7 +31,7 @@ export const useTriviaStore = create (persist((set) => ({
   
 }),
  {
-        name: 'Trivia Party', // Nombre que se utilizará en el localStorage
-        partialize: (state) => ({ player: state.player }), // Aquí ponemos lo que se guardará en el localStorage. Es recomendable especificarlo expresamente, porque si no lo hacemos, se guardará todo el contenido de la store en el localStorage, lo cual incluye las funciones de los actions, pero como no podemos guardar una función en el localStorage, daría problemas
+        name: 'Trivia Party', 
+        partialize: (state) => ({ player: state.player, room: state.room }), // Aquí ponemos lo que se guardará en el localStorage. Es recomendable especificarlo expresamente, porque si no lo hacemos, se guardará todo el contenido de la store en el localStorage, lo cual incluye las funciones de los actions, pero como no podemos guardar una función en el localStorage, daría problemas
 }
 ))
