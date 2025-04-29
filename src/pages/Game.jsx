@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import {io} from 'socket.io-client';
 import { questions } from "../mock/questions";
 import { answers } from "../mock/answers";
+import { updatePlayer } from "../services/api";
 
 const Game = () => {
     const { roomId } = useParams()
@@ -11,6 +12,7 @@ const Game = () => {
     const [questionIndex, setQuestionIndex] = useState(0)
     const [question, setQuestion] = useState({})
     const [currentAnswers, setCurrentAnswers] = useState([])
+    const [isAnswered, setIsAnswered] = useState(false);
     const navigate = useNavigate()
 
 
@@ -31,6 +33,19 @@ const Game = () => {
         socketRef.current = io('http://localhost:3000')
     }
     const socket = socketRef.current;
+
+    const handleAnswer = async (isCorrect) =>{
+      if(isCorrect){
+        await setPlayer({...player, score: player.score + 1})
+        // await updatePlayer({playerId: player.id, player})
+      }
+      setIsAnswered(true)
+    }
+
+    const handleNext = async () =>{
+      setIsAnswered(false)
+      setQuestionIndex(prev => prev + 1)
+    }
 
   useEffect(() => {
     socket.on('connect', () => {
@@ -71,9 +86,20 @@ const Game = () => {
                 <p className="text-lg mb-6 text-center">{question.question_text} id: {question.id}</p>
                 <div className="grid sm:grid-cols-2 gap-4">
                     {
-                        currentAnswers.length>0 && currentAnswers.map(answer => {
+                        currentAnswers.length>0 && currentAnswers.map((answer, index) => {
                             return(
-                                <button key={answer.id} className="bg-indigo-400 hover:bg-blue-700 cursor-pointer text-white p-3 sm:p-6 rounded">
+                              <button
+                              key={index}
+                              onClick={() => handleAnswer(answer.is_correct)}
+                              disabled={isAnswered}
+                              className={` py-2 px-4 rounded ${
+                                isAnswered
+                                  ? answer.is_correct
+                                    ? "bg-emerald-500"
+                                    : "bg-rose-500"
+                                  : "bg-blue-500 hover:bg-blue-700"
+                              } text-white`}
+                            >
                                     {answer.answer_text}
                                 </button>
                             )
@@ -81,6 +107,12 @@ const Game = () => {
                     }
                 </div>
             </div>
+            <p className="text-4xl">Your score: {player.score}</p>
+            { isAnswered &&
+              <button onClick={handleNext} className='border-2 border-amber-900 px-8 py-2 text-lg text-white bg-amber-600/80 active:bg-lime-500 active:border-lime-800 rounded' >
+                Siguiente
+              </button>
+            }
         </div>
     );
 };

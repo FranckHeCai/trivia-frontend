@@ -21,6 +21,11 @@ export const createPlayer = async (player) => {
   return createdPlayer.data
 }
 
+export const updatePlayer = async ({playerId, player}) => {
+  const createdPlayer = await i.post(`/players/update/${playerId}`, player)
+  return createdPlayer.data
+}
+
 export const deletePlayer = async(player) => {
   i.delete('/players/delete', 
     {
