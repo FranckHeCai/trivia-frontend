@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import {io} from 'socket.io-client';
 import { questions } from "../mock/questions";
 import { answers } from "../mock/answers";
-import { updatePlayer } from "../services/api";
+import { getQuestions, updatePlayer } from "../services/api";
 
 const Game = () => {
     const { roomId } = useParams()
@@ -13,6 +13,7 @@ const Game = () => {
     const [question, setQuestion] = useState({})
     const [currentAnswers, setCurrentAnswers] = useState([])
     const [isAnswered, setIsAnswered] = useState(false);
+    const [fetchedQuestions, setFetchedQuestions] = useState([])
     const navigate = useNavigate()
 
 
@@ -47,6 +48,10 @@ const Game = () => {
       setQuestionIndex(prev => prev + 1)
     }
 
+    const roomQuestions = async () => {
+      const allQuestions = await getQuestions(roomId)
+       setFetchedQuestions(allQuestions)
+    }
   useEffect(() => {
     socket.on('connect', () => {
       console.log('question page connected');
@@ -59,6 +64,8 @@ const Game = () => {
       socket.emit('playerJoins', roomId)
     });
     
+    roomQuestions()
+
     return () => {
       socket.off('allPlayersReady'); // Clean up listener
     };
@@ -74,7 +81,7 @@ const Game = () => {
   useEffect(() => {
     console.log('Current question: ', question)
     console.log('Current answers: ', currentAnswers)
-  
+    
   }, [currentAnswers, question])
   
   
@@ -85,7 +92,7 @@ const Game = () => {
                 <h2 className="text-2xl font-semibold mb-4 text-center">Pregunta</h2>
                 <p className="text-lg mb-6 text-center">{question.question_text} id: {question.id}</p>
                 <div className="grid sm:grid-cols-2 gap-4">
-                    {
+                    { // fetchedQuestions.length>0
                         currentAnswers.length>0 && currentAnswers.map((answer, index) => {
                             return(
                               <button

@@ -34,6 +34,11 @@ export const deletePlayer = async(player) => {
   )
 }
 
+export const getQuestions = async (roomCode) => {
+  const questions = await i.get(`/questions/room/${roomCode}`)
+  return questions.data
+}
+
 export const createQuestion = async (question) =>{
   const newQuestion = await i.post('/questions', question)
   return newQuestion.data
