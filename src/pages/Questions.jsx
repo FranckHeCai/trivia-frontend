@@ -10,7 +10,7 @@ const Questions = () => {
   const { player, setPlayer, room } = useTriviaStore(state => state)
   const [type, setType] = useState("multiple");
   const [question, setQuestion] = useState("");
-  const [createdQuestions, setCreatedQuestions] = useState([])
+  const [createdQuestions, setCreatedQuestions] = useState(0)
   const [answers, setAnswers] = useState(["", ""]);
   const [correctIndex, setCorrectIndex] = useState(null);
   const [maxQuestions, setMaxQuestions] = useState(null)
@@ -41,7 +41,7 @@ const Questions = () => {
   }, [])
 
   useEffect(() => {
-    if(createdQuestions.length === maxQuestions ){
+    if(createdQuestions === maxQuestions ){
       console.log("todas las preguntas han sido creadas")
       handleReady()
     }
@@ -107,7 +107,7 @@ const Questions = () => {
       playerId: player.id
     }
 
-    setCreatedQuestions([...createdQuestions, collectedQuestion])
+    setCreatedQuestions(prev => prev + 1)
 
     // console.log(payload)
     console.log('question: ',collectedQuestion)
@@ -132,7 +132,7 @@ const Questions = () => {
     })
     .catch(error => {console.error('Error creating answers: ', error)})
 
-  resetForm();
+    resetForm();
   };
 
   const resetForm = () => {
@@ -146,7 +146,7 @@ const Questions = () => {
     <div className="p-2 flex flex-col gap-5 w-full h-screen items-center justify-center">
       
       
-      {createdQuestions.length < maxQuestions 
+      {createdQuestions < maxQuestions 
         ? (
         <div className="p-2 sm:p-5 w-full  sm:w-md rounded-xl shadow bg-white">
           <h2 className="text-xl font-bold text-center">Crea una pregunta</h2>
@@ -248,7 +248,7 @@ const Questions = () => {
         )
       }
 
-      <button onClick={()=>{
+      {/* <button onClick={()=>{
         if(player.isReady){
           handleNotReady()
         }else{
@@ -256,7 +256,7 @@ const Questions = () => {
         }
       }} className={`border-2 border-amber-900 px-8 py-2 text-lg text-white ${player.isReady ? "bg-emerald-500 active:bg-emerald-700 active:border-emerald-800" : "bg-red-500 active:bg-red-700 active:border-red-800"}   rounded`}>
         {player.isReady ? "Ready" : "Not ready"}
-      </button>
+      </button> */}
     </div>
   );
 };

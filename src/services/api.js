@@ -34,8 +34,8 @@ export const deletePlayer = async(player) => {
   )
 }
 
-export const getQuestions = async (roomCode) => {
-  const questions = await i.get(`/questions/room/${roomCode}`)
+export const getQuestions = async (roomCode, playerId) => {
+  const questions = await i.get(`/questions/room/${roomCode}/${playerId}`)
   return questions.data
 }
 
@@ -49,6 +49,6 @@ export const createAnswer = (answer) => {
 }
 
 export const getAnswers = async (questionId) => {
-  const questions = await i.get(`/answers/question/${questionId}`)
-  return questions.data
+  const answers = await i.get(`/answers/question/${questionId}`)
+  return answers.data
 }

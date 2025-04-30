@@ -7,6 +7,7 @@ import JoinRoom from "@/pages/JoinRoom"
 import Lobby from '@/pages/Lobby'
 import Questions from '@/pages/Questions'
 import Game from './pages/Game'
+import Leaderboard from './pages/Leaderboard'
 
 
 function App() {
@@ -23,6 +24,7 @@ function App() {
             <Route path="/questions/:roomId" element={<Questions />} />
             <Route path="/lobby/:roomCode" element={<Lobby />} />
             <Route path="/game/:roomId" element={<Game />} />
+            <Route path="/end/:roomId" element={<Leaderboard />} />
             <Route path="*" element={<Error />} />
         </Routes>
     </BrowserRouter>

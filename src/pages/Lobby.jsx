@@ -39,9 +39,9 @@ const Lobby = () => {
       })
 
       socket.on('allPlayersReady', async () => {
-        console.log("all players are ready")
-        await handleNotReady()
+        console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaall players are ready")
         navigate(`/questions/${roomCode}`)
+        await handleNotReady()
       })
 
       socket.emit('playerJoins', roomCode)
@@ -81,7 +81,7 @@ const Lobby = () => {
   }
 
   const handleReady = async () =>{
-    console.log('player is ready')
+    console.log('pppppppppppppppppppppppppppppplayer is ready')
     await setPlayer({...player, isReady: true})
     socket.emit('playerIsReady', {roomId: roomCode, playerId:  player.id})
   }

@@ -32,7 +32,7 @@ const Start = () => {
          handleSubmit(event)
         }} className="flex flex-col items-center p-3 rounded-lg gap-1 border-2 border-amber-950">
           <label className="text-lg">Ingresa tu apodo</label>
-          <input required onChange={(event)=>{
+          <input required value={player.nickname} onChange={(event)=>{
             handleChange(event)
           }} className="mb-2 bg-white p-3 rounded w-full outline-0 focus:outline-2 focus:outline-amber-900 text-center" type="text" />
           <label className="font-extralight">Escoge un avatar</label>
