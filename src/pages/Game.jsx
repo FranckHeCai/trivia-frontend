@@ -73,16 +73,16 @@ const Game = () => {
 
   useEffect(() => {
     console.log("All answers: ", answers)
+    const filteredQuestions = fetchedQuestions.filter(question => question.id !== player.id)
     const currentQuestion = questions[questionIndex]
     setQuestion(currentQuestion)
     const currentAnswers = answers.filter(answer => answer.questionId === currentQuestion.id)
     setCurrentAnswers(currentAnswers)
   }, [questionIndex])
   useEffect(() => {
-    console.log('Current question: ', question)
-    console.log('Current answers: ', currentAnswers)
+    console.log('Fetched questions: ', fetchedQuestions)
     
-  }, [currentAnswers, question])
+  }, [fetchedQuestions])
   
   
     return (

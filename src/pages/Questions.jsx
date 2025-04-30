@@ -28,7 +28,6 @@ const Questions = () => {
       console.log('question page connected');
 
       socket.on('allPlayersReady', async () => {
-        console.log('allPlayersReady event received');
         await handleNotReady();
         navigate(`/game/${roomId}`);
       });
@@ -42,8 +41,11 @@ const Questions = () => {
   }, [])
 
   useEffect(() => {
-    console.log('max questions per player: ', room.maxQuestions)
-  }, []) 
+    if(createdQuestions.length === maxQuestions ){
+      console.log("todas las preguntas han sido creadas")
+      handleReady()
+    }
+  }, [createdQuestions]) 
 
   const handleNotReady = async () =>{
     console.log('player is not ready')
@@ -52,7 +54,8 @@ const Questions = () => {
   }
 
   const handleReady = async () =>{
-    console.log('player is ready')
+    console.log('player is ready: ', player)
+
     await setPlayer({...player, isReady: true})
     socket.emit('playerIsReady', {roomId, playerId:  player.id})
   }
@@ -109,28 +112,27 @@ const Questions = () => {
     // console.log(payload)
     console.log('question: ',collectedQuestion)
 
+    const newQuestion = await createQuestion(collectedQuestion)
+    console.log('question created successfully')
+    const questionId = newQuestion.id
 
-    // const newQuestion = await createQuestion(collectedQuestion)
-    // console.log('question created successfully')
-    // const questionId = newQuestion.id
-
-    // const separatedAnswers = filledAnswers.map((answer, index) => {
-    //   const isCorrect = index === correctIndex
-    //  const answerObject = {
-    //     answer_text: answer,
-    //     is_correct: isCorrect,
-    //     questionId: questionId
-    //   }
-    //   return answerObject
-    // })
+    const separatedAnswers = filledAnswers.map((answer, index) => {
+      const isCorrect = index === correctIndex
+    const answerObject = {
+        answer_text: answer,
+        is_correct: isCorrect,
+        questionId: questionId
+      }
+      return answerObject
+    })
     
-    // Promise.all(separatedAnswers.map(answer => createAnswer(answer)))
-    // .then((response)=> {
-    //   response.map(answer => {console.log('created answer: ', answer.data)})
-    // })
-    // .catch(error => {console.error('Error creating answers: ', error)})
+    Promise.all(separatedAnswers.map(answer => createAnswer(answer)))
+    .then((response)=> {
+      response.map(answer => {console.log('created answer: ', answer.data)})
+    })
+    .catch(error => {console.error('Error creating answers: ', error)})
 
-    resetForm();
+  resetForm();
   };
 
   const resetForm = () => {
@@ -144,7 +146,7 @@ const Questions = () => {
     <div className="p-2 flex flex-col gap-5 w-full h-screen items-center justify-center">
       
       
-      {createdQuestions.length < room.maxQuestions 
+      {createdQuestions.length < maxQuestions 
         ? (
         <div className="p-2 sm:p-5 w-full  sm:w-md rounded-xl shadow bg-white">
           <h2 className="text-xl font-bold text-center">Crea una pregunta</h2>

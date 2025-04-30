@@ -47,3 +47,8 @@ export const createQuestion = async (question) =>{
 export const createAnswer = (answer) => {
   return i.post('/answers', answer)
 }
+
+export const getAnswers = async (questionId) => {
+  const questions = await i.get(`/answers/question/${questionId}`)
+  return questions.data
+}
