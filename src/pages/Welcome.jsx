@@ -12,10 +12,13 @@ const Welcome = () => {
   }
 
   return (
-    <div className="flex flex-col items-center justify-center w-full h-screen p-2 sm:p-5  gap-10" >
-      <div className="">
+    <div className="flex flex-col items-center justify-center w-full h-screen p-2 sm:p-5  gap-6" >
+      <div className="flex flex-col">
         <h1 className="text-xl ">Bienvenido, </h1>
         <h2 className="text-4xl font-medium">{player.nickname}!</h2>
+        <picture className="mt-2 w-30 h-30 rounded-full overflow-hidden" >
+          <img className="w-full scale-110" src={`/avatars/${player.avatar}.svg`} alt="" />
+        </picture>
       </div>
       <div className=" sm:w-sm text-sm text-amber-950">
         <p>Quien conoce mejor a quien ? Reta a tus amigos creando una sala o uniendote a una.</p>
