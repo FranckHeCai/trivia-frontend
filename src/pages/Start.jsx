@@ -22,12 +22,12 @@ const Start = () => {
   }
 
   return (
-    <div className="flex flex-col gap-5 p-2  min-h-screen">
+    <div className="flex flex-col gap-5 p-2 justify-center  min-h-screen">
       <h1 className="text-center text-lg sm:text-xl md:text-3xl font-medium">Super Trivia Party</h1>
       <picture className="">
         <img className="sm:w-50 h-50 m-auto bg-gray-500" src="" alt="" />
       </picture>
-      <div className="w-full mx-auto sm:w-sm md:w-md lg:w-xl">
+      <div className="w-full mx-auto sm:w-xl lg:w-2xl">
         <form onSubmit={(event) => {
          handleSubmit(event)
         }} className="flex flex-col items-center p-3 rounded-lg gap-1 border-2 border-amber-950">

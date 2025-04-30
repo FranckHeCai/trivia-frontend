@@ -58,8 +58,8 @@ const JoinRoom = () => {
       <h1 className="text-xl sm:text-3xl">Unirse a sala</h1>
       <form className="flex flex-col gap-4" onSubmit={(event) => {handleSubmit(event)}}>
         <div className="flex flex-col gap-2">
-          <label className="text-center" htmlFor="maPlayers">Código de sala</label>
-          <input onChange={(event)=>{handleChange(event)}} value={code} min={2} max={5} className="p-1 bg-white rounded w-full outline-0 focus:outline-2 focus:outline-amber-900 text-center text-lg font-bold" id="maxPlayers" type="text" required />
+          <label className="text-sm sm:text-lg text-center" htmlFor="maPlayers">Código de sala</label>
+          <input onChange={(event)=>{handleChange(event)}} value={code} min={2} max={5} className="p-1 bg-white rounded w-full outline-0 focus:outline-2 focus:outline-amber-900 text-center text-lg " id="maxPlayers" type="text" required />
           {
             roomExists && 
           <span className="text-lg text-red-500">La sala no existe!</span>
@@ -71,7 +71,9 @@ const JoinRoom = () => {
         </div>
         <button className="border-2 border-amber-900 px-8 py-2 text-lg text-white bg-amber-600/80 active:bg-lime-500 active:border-lime-800 rounded">Unirse a sala</button>
       </form>
-      <button onClick={()=>{handleRoom(code)}} className="border-2 border-amber-900 px-8 py-2 text-lg text-white bg-amber-600/80 active:bg-lime-500 active:border-lime-800 rounded">get room</button>
+      {/* <button onClick={()=>{handleRoom(code)}} className="border-2 border-amber-900 px-8 py-2 text-lg text-white bg-amber-600/80 active:bg-lime-500 active:border-lime-800 rounded">
+        get room
+      </button> */}
     </div>
   );
 };
