@@ -29,7 +29,7 @@ const Welcome = () => {
         <h1 className="text-xl ">Bienvenido, </h1>
         <h2 className="text-4xl font-medium">{player.nickname}!</h2>
         <div className="relative mt-2 flex justify-center">
-          <div className="w-20 h-20 sm:w-30 sm:h-30 rounded-full overflow-hidden">
+          <div className="w-20 h-20 sm:w-30 sm:h-30 rounded-full overflow-hidden border-3">
             <img
               className="w-full scale-110"
               src={`/avatars/${player.avatar}.svg`}
@@ -54,7 +54,7 @@ const Welcome = () => {
           <div className="flex flex-col justify-between bg-white p-3 sm:p-6 rounded-lg shadow-lg">
             <h3 className="text-md sm:text-lg mb-4 text-center">Selecciona un avatar</h3>
             <div className="grid grid-cols-3 gap-2">
-              {["bull", "bunny", "cat", "crocodile", "dog", "frog", "panda", "squirrel", "wolf"].map((avatar) => (
+              {["bull", "bunny", "cat", "crocodile", "dog", "frog", "panda", "wolf"].map((avatar) => (
                 <button
                   key={avatar}
                   onClick={() => handleAvatarSelect(avatar)}

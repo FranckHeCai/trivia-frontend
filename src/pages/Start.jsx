@@ -21,6 +21,11 @@ const Start = () => {
     navigate("/welcome")
   }
 
+  useEffect(() => {
+    setPlayer({...player, score: 0})
+  }, [])
+  
+
   return (
     <div className="flex flex-col gap-5 p-2 justify-center  min-h-screen">
       <h1 className="text-center text-lg sm:text-xl md:text-3xl font-medium">Super Trivia Party</h1>

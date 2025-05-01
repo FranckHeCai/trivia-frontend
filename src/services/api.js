@@ -22,7 +22,7 @@ export const createPlayer = async (player) => {
 }
 
 export const updatePlayer = async ({playerId, player}) => {
-  const createdPlayer = await i.post(`/players/update/${playerId}`, player)
+  const createdPlayer = await i.put(`/players/update/${playerId}`, player)
   return createdPlayer.data
 }
 

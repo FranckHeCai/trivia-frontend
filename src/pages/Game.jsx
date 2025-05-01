@@ -56,13 +56,6 @@ const Game = () => {
 
   }, [fetchedQuestions, questionIndex])
 
-  // useEffect(() => {
-  //     const currentQuestion = fetchedQuestions[questionIndex]
-  //     console.log("current question: ",currentQuestion)
-  //     setQuestion(currentQuestion)
-  //     // const currentAnswers = answers.filter(answer => answer.questionId === currentQuestion.id)
-  // }, [questionIndex, fetchedQuestions])
-  
 const handleNotReady = async () =>{
   console.log('player is not ready')
   await setPlayer({...player, isReady: false})
@@ -84,9 +77,13 @@ const handleNotReady = async () =>{
 
   const handleAnswer = async (isCorrect) =>{
     if(isCorrect){
+      console.log('answer is correct')
       await setPlayer({...player, score: player.score + 1})
-      // await updatePlayer({playerId: player.id, player})
+      const newPlayerScore = {...player, score: player.score + 1}
+      console.log(newPlayerScore)
+      await updatePlayer({playerId: player.id, player: newPlayerScore})
     }
+    console.log('setting answered true')
     setIsAnswered(true)
   }
 
@@ -146,6 +143,7 @@ const handleNotReady = async () =>{
                 }
               </button>
             }
+            <button onClick={()=>{console.log(player)}}>get player</button>
         </div>
     );
 };
