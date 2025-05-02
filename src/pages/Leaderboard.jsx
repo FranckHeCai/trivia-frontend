@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { getPlayers } from "../services/api";
 import { players } from "../mock/player";
-import crownIcon from "../icons/crown.svg"
+import crownIcon from "../icons/crown-icon.svg"
 
 const Leaderboard = () => {
   const { roomId } = useParams()
@@ -19,10 +19,10 @@ const Leaderboard = () => {
   return (
     <div className="flex flex-col p-2 items-center justify-center min-h-screen bg-gradient-to-b from-amber-300 to-orange-500/70 text-white">
       <div className="w-full sm:w-lg px-5">
-        <h1 className="text-center text-2xl sm:text-4xl py-3 rounded-tl-xl rounded-tr-xl bg-amber-600">Final de partida</h1>
+        <h1 className="text-center text-xl sm:text-4xl py-1 rounded-tl-xl rounded-tr-xl bg-amber-600">Final de partida</h1>
       </div>
       <div className=" w-full max-w-2xl bg-white text-black rounded-lg shadow-2xl p-6">
-        <div className="w-full h-80 overflow-y-auto pr-2
+        <div className="w-full h-65 sm:h-70 overflow-y-auto pr-2
         [&::-webkit-scrollbar]:w-2
         [&::-webkit-scrollbar-track]:rounded-full
         [&::-webkit-scrollbar-track]:bg-amber-100
@@ -34,7 +34,7 @@ const Leaderboard = () => {
           {sortedPlayers.map((player, index) => (
             <div
               key={player.nickname}
-              className={`flex flex-col items-center pr-3 sm:flex-row sm:items-center sm:justify-between mb-3.5 rounded-lg text-lg shadow-sm border-3 
+              className={`flex flex-col items-center p-2 sm:p-0 sm:pr-3 sm:flex-row sm:items-center sm:justify-between mb-3.5 rounded-lg text-lg shadow-sm border-3 overflow-hidden
                 ${index === 0
                     ? 'border-amber-400'
                     : index === 1
@@ -45,9 +45,9 @@ const Leaderboard = () => {
                 }
                 `}
             >
-              <div className="flex flex-col gap-2 sm:flex-row  justify-center items-center text-center">
+              <div className="flex flex-col sm:gap-2 sm:flex-row  justify-center items-center text-center ">
                 <div className="flex relative">
-                  <picture className="w-22 h-22 relative rounded-tl-sm rounded-bl-sm overflow-hidden">
+                  <picture className="w-19 h-19 relative rounded-full sm:rounded-none overflow-hidden">
                     <img
                       src={`/avatars/${player.avatar}.svg`}
                       alt={player.avatar}
@@ -55,12 +55,12 @@ const Leaderboard = () => {
                     />
                   </picture>
                   { index === 0 &&
-                    <img className="z-10 absolute top-[-5px] left-6.5 w-9" src={crownIcon} alt="crown logo" />
+                    <img className="z-10 absolute top-0 left-6 w-7" src={crownIcon} alt="crown logo" />
                   }
                 </div>
-                <span>{player.nickname}</span>
+                <span className="text-sm sm:text-xl">{player.nickname}</span>
               </div>
-              <span className="text-lg">{player.score} ptos</span>
+              <span className="text-sm sm:text-lg">{player.score} ptos</span>
             </div>
           ))}
         </div>
