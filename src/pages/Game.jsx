@@ -2,8 +2,6 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useTriviaStore } from "../store/store";
 import { useEffect, useRef, useState } from "react";
 import {io} from 'socket.io-client';
-import { questions } from "../mock/questions";
-import { answers } from "../mock/answers";
 import { getAnswers, getQuestions, updatePlayer } from "../services/api";
 
 const Game = () => {
@@ -55,12 +53,6 @@ const Game = () => {
     }
 
   }, [fetchedQuestions, questionIndex])
-
-const handleNotReady = async () =>{
-  console.log('player is not ready')
-  await setPlayer({...player, isReady: false})
-  socket.emit('playerNotReady', {roomId, playerId:  player.id})
-  }
 
   const handleReady = async () =>{
   console.log('player has finished')

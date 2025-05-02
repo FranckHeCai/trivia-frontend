@@ -1,20 +1,60 @@
-import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import { getPlayers } from "../services/api";
+import {useEffect, useState, useRef} from 'react';
+import { useNavigate, useParams } from "react-router-dom";
+import { getPlayers, updatePlayer } from "../services/api";
 import { players } from "../mock/player";
 import crownIcon from "../icons/crown-icon.svg"
+import {io} from 'socket.io-client';
+import { useTriviaStore } from '../store/store';
 
 const Leaderboard = () => {
   const { roomId } = useParams()
-
+  const { player ,setPlayer } = useTriviaStore(state=> state)
+  const navigate = useNavigate()
+  const socketRef = useRef()
+  if (!socketRef.current) {
+    socketRef.current = io('http://localhost:3000')
+  }
+  const socket = socketRef.current;
   useEffect(() => {
     const getRoomPlayers = async () => {
       const fetchedPlayers = await getPlayers(roomId)
     }
   }, [])
 
-  // Sort players by score in descending order
+  useEffect(() => {
+
+    socket.on('connect', () => {
+      console.log('question page connected')
+      
+      socket.on('play-again', async () => {
+        await setPlayer({...player, score: 0})
+        const resetPlayer = {...player, score: 0}
+        await updatePlayer({playerId: player.id, player: resetPlayer})
+        navigate(`/lobby/${roomId}`)
+      });
+
+      socket.on('gameFinished', async () => {
+        navigate(`/welcome`)
+      });
+
+      socket.emit('playerJoins', roomId)
+    });
+    
+    return () => {
+      socket.off('allPlayersReady')
+    };
+  }, [])
+
+
   const sortedPlayers = [...players].sort((a, b) => b.score - a.score);
+
+  const handleResetGame = () => {
+    socket.emit('game-reset', roomId)
+  }
+
+  const handleFinishGame = () => {
+    socket.emit('finishGame', roomId)
+  }
 
   return (
     <div className="flex flex-col p-2 items-center justify-center min-h-screen bg-gradient-to-b from-amber-300 to-orange-500/70 text-white">
@@ -66,10 +106,10 @@ const Leaderboard = () => {
         </div>
 
       <div className="mt-3 flex flex-col sm:flex-row justify-center gap-2 sm:gap-4">
-        <button onClick={()=>{}} className="border-2 border-amber-900 px-8 py-2 text-sm sm:text-lg text-white bg-amber-600/80 active:bg-lime-500 active:border-lime-800 rounded">
+        <button onClick={handleResetGame} className="border-2 border-amber-900 px-8 py-2 text-sm sm:text-lg text-white bg-amber-600/80 active:bg-lime-500 active:border-lime-800 rounded">
           Volver a jugar
         </button>
-        <button onClick={()=>{}} className="border-2 border-amber-900 px-8 py-2 text-sm sm:text-lg text-white bg-amber-600/80 active:bg-lime-500 active:border-lime-800 rounded">
+        <button onClick={handleFinishGame} className="border-2 border-amber-900 px-8 py-2 text-sm sm:text-lg text-white bg-amber-600/80 active:bg-lime-500 active:border-lime-800 rounded">
           Terminar
         </button>
       </div>

@@ -3,8 +3,8 @@ import PlayerCard from "../components/PlayerCard";
 import { io } from "socket.io-client";
 import { useTriviaStore } from "../store/store";
 import { useEffect, useRef, useState } from "react";
-import {deletePlayer, getRoom} from '../services/api';
-const socket = io('http://localhost:3000');
+import {deletePlayer, getRoom, updatePlayer} from '../services/api';
+
 const Lobby = () => {
   const socketRef = useRef()
   if (!socketRef.current) {
@@ -18,6 +18,9 @@ const Lobby = () => {
   
   const setup = async () => {
     await setPlayer({...player, isReady: false})
+    const resetPlayer = {...player, isReady: false, score: 0}
+    await updatePlayer({playerId: player.id, player: resetPlayer})
+
     const roomData = await getRoom(roomCode)
     const maxPlayers = roomData[0].maxPlayers
     console.log("max players: ", maxPlayers)
@@ -39,7 +42,7 @@ const Lobby = () => {
       })
 
       socket.on('allPlayersReady', async () => {
-        console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaall players are ready")
+        console.log("all players are ready")
         navigate(`/questions/${roomCode}`)
         await handleNotReady()
       })
