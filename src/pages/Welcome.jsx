@@ -1,6 +1,5 @@
 import { useNavigate } from "react-router-dom";
 import { useTriviaStore } from "../store/store";
-import { IconEdit } from '@tabler/icons-react';
 import BackButton from "../components/BackButton";
 import { useState } from "react";
 
@@ -23,21 +22,27 @@ const Welcome = () => {
     setIsPopupOpen(false); // Close the popup
   };
 
+  const EditIcon = () => <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="size-6">
+  <path strokeLinecap="round" strokeLinejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
+  </svg>
+
+
   return (
-    <div className="flex flex-col items-center justify-center w-full h-screen p-2 sm:p-5  gap-6" >
-      <div className="flex flex-col text-center">
-        <h1 className="text-xl ">Bienvenido, </h1>
-        <h2 className="text-4xl font-medium">{player.nickname}!</h2>
-        <div className="relative mt-2 flex justify-center">
-          <div className="w-20 h-20 sm:w-30 sm:h-30 rounded-full overflow-hidden border-3">
+    <div className="flex flex-col items-center justify-center w-full h-screen p-2 sm:p-5 gap-6 sm:gap-6" >
+      <div className="flex flex-col w-full text-center text-amber-950 items-center justify-center">
+        <h1 className="text-lg sm:text-xl ">Bienvenido, </h1>
+        <h2 className="text-3xl sm:text-4xl font-medium">{player.nickname}!</h2>
+
+        <div className="w-3xs flex relative justify-center mt-3 sm:mt-6">
+          <picture className="w-20 h-20 sm:w-30 sm:h-30 rounded-full overflow-hidden border-3">
             <img
               className="w-full scale-110"
               src={`/avatars/${player.avatar}.svg`}
               alt="Avatar"
             />
-          </div>
-          <button onClick={handleAvatarClick} className="absolute right-3 sm:right-0 bottom-[-10px] cursor-pointer">
-            <IconEdit  size={30} stroke={2}/>
+          </picture>
+          <button onClick={handleAvatarClick} className="absolute right-20 sm:right-15 bottom-[-8px] sm:bottom-0 cursor-pointer">
+            <EditIcon />
           </button>
         </div>
       </div>
@@ -50,7 +55,7 @@ const Welcome = () => {
       </div>
       <BackButton />
       {isPopupOpen && (
-        <div className="fixed inset-0 bg-gray-950/20 flex items-center justify-center">
+        <div onClick={()=>{setIsPopupOpen(false)}} className="fixed inset-0 bg-gray-950/20 flex items-center justify-center">
           <div className="flex flex-col justify-between bg-white p-3 sm:p-6 rounded-lg shadow-lg">
             <h3 className="text-md sm:text-lg mb-4 text-center">Selecciona un avatar</h3>
             <div className="grid grid-cols-3 gap-2">
@@ -58,7 +63,7 @@ const Welcome = () => {
                 <button
                   key={avatar}
                   onClick={() => handleAvatarSelect(avatar)}
-                  className="max-w-20 max-h-20 rounded-full overflow-hidden border-3 border-gray-300 hover:border-amber-600"
+                  className="max-w-20 max-h-20 rounded-full overflow-hidden border-3 border-gray-300 hover:border-amber-950"
                 >
                   <img
                     src={`/avatars/${avatar}.svg`}

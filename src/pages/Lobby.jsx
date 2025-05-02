@@ -81,7 +81,7 @@ const Lobby = () => {
   }
 
   const handleReady = async () =>{
-    console.log('pppppppppppppppppppppppppppppplayer is ready')
+    console.log('player is ready')
     await setPlayer({...player, isReady: true})
     socket.emit('playerIsReady', {roomId: roomCode, playerId:  player.id})
   }
@@ -93,7 +93,7 @@ const Lobby = () => {
   }
 
   return (
-    <div className="w-full h-screen flex flex-col gap-5 justify-center items-center">
+    <div className="w-full h-screen flex flex-col gap-5 sm:gap-10 justify-center items-center">
       <div className="w-full sm:w-sm">
         <h1 className="text-xl text-center">Código de sala</h1>
         <p className="text-3xl text-center">{roomCode}</p>
@@ -102,30 +102,28 @@ const Lobby = () => {
       <div className="max-w-xs sm:max-w-xl grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-5">
         { roomPlayers.length > 0 && roomPlayers.map(player => <PlayerCard key={player.nickname} player={player} />)}
       </div>
-      {/*<div className="max-w-xs sm:max-w-xl grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-5">
-        {
-          players.map(player => <PlayerCard key={player.nickname} player={player} />)
-        }
-      </div>*/}
-      <button onClick={handleLeave} className="border-2 border-amber-900 px-8 py-2 text-lg text-white bg-red-500 active:bg-red-700 active:border-red-800 rounded">
-        Salir de sala
-      </button>
 
-      <button onClick={()=> {console.log(player)}} className="border-2 border-amber-900 px-8 py-2 text-lg text-white bg-red-500 active:bg-red-700 active:border-red-800 rounded">
+      <div className="flex flex-col gap-2 ">
+        <button onClick={()=>{
+          if(player.isReady){
+            handleNotReady()
+          }else{
+            handleReady()
+          }
+        }} className={`border-2 border-amber-900 px-8 py-2 text-lg text-white ${player.isReady ? "bg-emerald-500 active:bg-emerald-700 active:border-emerald-800" : "bg-red-500 active:bg-red-700 active:border-red-800"}   rounded`}>
+          Listo
+        </button>
+        <button onClick={handleLeave} className="border-2 border-amber-900 px-8 py-2 text-lg text-white bg-red-500 active:bg-red-700 active:border-red-800 rounded">
+          Salir de sala
+        </button>
+      </div>
+
+      {/* <button onClick={()=> {console.log(player)}} className="border-2 border-amber-900 px-8 py-2 text-lg text-white bg-red-500 active:bg-red-700 active:border-red-800 rounded">
         get player
-      </button>
-      <button onClick={()=>{
-        if(player.isReady){
-          handleNotReady()
-        }else{
-          handleReady()
-        }
-      }} className={`border-2 border-amber-900 px-8 py-2 text-lg text-white ${player.isReady ? "bg-emerald-500 active:bg-emerald-700 active:border-emerald-800" : "bg-red-500 active:bg-red-700 active:border-red-800"}   rounded`}>
-        {player.isReady ? "Ready" : "Not ready"}
-      </button>
-      <button onClick={handleNext} className="border-2 border-amber-900 px-8 py-2 text-lg text-white bg-red-500 active:bg-red-700 active:border-red-800 rounded">
+      </button> */}
+      {/* <button onClick={handleNext} className="border-2 border-amber-900 px-8 py-2 text-lg text-white bg-red-500 active:bg-red-700 active:border-red-800 rounded">
         next
-      </button>
+      </button> */}
     </div>
   );
 };

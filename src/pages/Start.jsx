@@ -22,7 +22,7 @@ const Start = () => {
   }
 
   useEffect(() => {
-    setPlayer({...player, score: 0})
+    setPlayer({...player, score: 0, avatar:""})
   }, [])
   
 
@@ -44,7 +44,7 @@ const Start = () => {
           <div className="grid gap-2 sm:grid-cols-6 md:grid-cols-8 grid-cols-4 mb-2">
             {avatars.map(avatar => {
               return(
-                <button type="button" onClick={()=>{ handleClick(avatar) }} className={`rounded-md ${ player.avatar === avatar ? "outline-3" : ""} overflow-hidden cursor-pointer`} key={avatar}>
+                <button type="button" onClick={()=>{ handleClick(avatar) }} className={`rounded-md ${ player.avatar === avatar ? "outline-3" : ""} overflow-hidden cursor-pointer outline-amber-700`} key={avatar}>
                   <img className="scale-115 object-cover"  src={`avatars/${avatar}.svg`} alt={`${avatar} avatar`} />
                 </button>
               )

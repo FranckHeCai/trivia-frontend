@@ -10,7 +10,6 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@tabler/icons-react": "^3.31.0",
     "@tailwindcss/vite": "^4.1.4",
     "axios": "^1.8.4",
     "react": "^19.0.0",
