@@ -54,7 +54,7 @@ const Welcome = () => {
         
         <button onClick={()=>{handleClick("join-room")}} className="border-2 border-amber-900 px-8 py-2 text-md sm:text-lg text-white bg-amber-600/80 active:bg-lime-500 active:border-lime-800 rounded">Unirse a sala</button>
       </div>
-      <BackButton />
+      <BackButton route={''} />
       {isPopupOpen && (
         <div onClick={()=>{setIsPopupOpen(false)}} className="fixed inset-0 bg-gray-950/20 flex items-center justify-center">
           <div className="flex flex-col justify-between bg-white p-3 sm:p-6 rounded-lg shadow-lg">

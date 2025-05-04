@@ -1,11 +1,11 @@
 import { useNavigate } from "react-router-dom";
 import arrowIcon from "@/icons/arrow-left.svg"
 
-const BackButton = () => {
+const BackButton = ({route}) => {
   const navigate = useNavigate()
 
   const handleBack = () =>{
-    navigate('/')
+    navigate(`/${route}`)
   }
 
   return (

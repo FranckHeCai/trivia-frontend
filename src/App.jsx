@@ -8,6 +8,8 @@ import Lobby from '@/pages/Lobby'
 import Questions from '@/pages/Questions'
 import Game from './pages/Game'
 import Leaderboard from './pages/Leaderboard'
+import Header from './components/Header'
+import Layout from './components/Layout'
 
 
 function App() {
@@ -17,14 +19,18 @@ function App() {
         <BrowserRouter>
         <Routes>   
             <Route index element={<Start />} />
-            <Route path="/welcome" element={<Welcome />} />
-            <Route path="/lobby" element={<Welcome />} />
-            <Route path="/create-room" element={<CreateRoom />} />
-            <Route path="/join-room" element={<JoinRoom />} />
-            <Route path="/questions/:roomId" element={<Questions />} />
-            <Route path="/lobby/:roomCode" element={<Lobby />} />
-            <Route path="/game/:roomId" element={<Game />} />
-            <Route path="/end/:roomId" element={<Leaderboard />} />
+
+            <Route element={<Layout />}>
+              <Route path="/welcome" element={<Welcome />} />
+              <Route path="/lobby" element={<Welcome />} />
+              <Route path="/create-room" element={<CreateRoom />} />
+              <Route path="/join-room" element={<JoinRoom />} />
+              <Route path="/questions/:roomId" element={<Questions />} />
+              <Route path="/lobby/:roomCode" element={<Lobby />} />
+              <Route path="/game/:roomId" element={<Game />} />
+              <Route path="/end/:roomId" element={<Leaderboard />} />
+            </Route>
+
             <Route path="*" element={<Error />} />
         </Routes>
     </BrowserRouter>

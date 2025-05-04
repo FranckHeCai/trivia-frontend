@@ -1,14 +1,15 @@
 import {useEffect, useState, useRef} from 'react';
 import { useNavigate, useParams } from "react-router-dom";
 import { getPlayers, updatePlayer } from "../services/api";
-import { players } from "../mock/player";
 import crownIcon from "../icons/crown-icon.svg"
 import {io} from 'socket.io-client';
 import { useTriviaStore } from '../store/store';
 
 const Leaderboard = () => {
   const { roomId } = useParams()
-  const { player ,setPlayer } = useTriviaStore(state=> state)
+  const { player , setPlayer } = useTriviaStore(state=> state)
+  const [players, setPlayers] = useState([])
+
   const navigate = useNavigate()
   const socketRef = useRef()
   if (!socketRef.current) {
@@ -18,17 +19,19 @@ const Leaderboard = () => {
   useEffect(() => {
     const getRoomPlayers = async () => {
       const fetchedPlayers = await getPlayers(roomId)
+      setPlayers(fetchedPlayers)
     }
-  }, [])
-
+    getRoomPlayers()
+  }, [roomId])
+  
   useEffect(() => {
 
     socket.on('connect', () => {
       console.log('question page connected')
       
       socket.on('play-again', async () => {
-        await setPlayer({...player, score: 0})
-        const resetPlayer = {...player, score: 0}
+        await setPlayer({...player, score: 0, isReady: false})
+        const resetPlayer = {...player, score: 0, isReady: false}
         await updatePlayer({playerId: player.id, player: resetPlayer})
         navigate(`/lobby/${roomId}`)
       });
@@ -46,7 +49,7 @@ const Leaderboard = () => {
   }, [])
 
 
-  const sortedPlayers = [...players].sort((a, b) => b.score - a.score);
+  const sortedPlayers = [...players]?.sort((a, b) => b.score - a.score);
 
   const handleResetGame = () => {
     socket.emit('game-reset', roomId)

@@ -135,7 +135,6 @@ const Game = () => {
                 }
               </button>
             }
-            <button onClick={()=>{console.log(player)}}>get player</button>
         </div>
     );
 };
