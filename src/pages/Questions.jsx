@@ -7,7 +7,7 @@ import {io} from 'socket.io-client';
 
 const Questions = () => {
   const { roomId } = useParams()
-  const { player, setPlayer, room } = useTriviaStore(state => state)
+  const { player, setPlayer } = useTriviaStore(state => state)
   const [type, setType] = useState("multiple");
   const [question, setQuestion] = useState("");
   const [createdQuestions, setCreatedQuestions] = useState(0)
@@ -95,7 +95,7 @@ const Questions = () => {
   const handleSubmit = async (event) => {
     event.preventDefault()
     const trimmedQuestion = question.trim();
-    const filledAnswers = type === "multiple" ? answers.filter(a => a.trim()) : ["True", "False"];
+    const filledAnswers = type === "multiple" ? answers.filter(a => a.trim()) : ["Verdadero", "Falso"];
 
     if (!trimmedQuestion || correctIndex === null || filledAnswers.length < 2) {
       return alert("Please complete all required fields and select the correct answer.");
@@ -217,7 +217,7 @@ const Questions = () => {
               )}
               {type === "boolean" && (
                 <div className="space-y-2">
-                  {["True", "False"].map((ans, idx) => (
+                  {["Verdadero", "Falso"].map((ans, idx) => (
                     <div key={idx} className="flex items-center space-x-2">
                       <input
                         type="radio"
