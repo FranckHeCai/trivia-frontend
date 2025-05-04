@@ -28,7 +28,8 @@ export const useTriviaStore = create (persist((set) => ({
     playerId: 0,
   },
   setQuestion: (question) => set({question}),
-  
+  showSettings: false,
+  setShowSettings: ((showSettings) => set({showSettings}))
 }),
  {
         name: 'Trivia Party', 

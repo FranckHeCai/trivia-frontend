@@ -51,6 +51,7 @@ const Welcome = () => {
       </div>
       <div className="flex flex-col sm:flex-row gap-2">
         <button onClick={()=>{handleClick("create-room")}} className="border-2 border-amber-900 px-8 py-2 text-md sm:text-lg text-white bg-amber-600/80 active:bg-lime-500 active:border-lime-800 rounded">Crear sala</button>
+        
         <button onClick={()=>{handleClick("join-room")}} className="border-2 border-amber-900 px-8 py-2 text-md sm:text-lg text-white bg-amber-600/80 active:bg-lime-500 active:border-lime-800 rounded">Unirse a sala</button>
       </div>
       <BackButton />

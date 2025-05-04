@@ -1,11 +1,11 @@
 const PlayerCard = ({player}) => {
   
   return (
-    <div className="flex flex-col items-center gap-1 p-3 rounded-md bg-amber-950/60 overflow-hidden">
-      <picture className="overflow-hidden rounded">
-        <img className="scale-115 object-cover" src={`/avatars/${player.avatar}.svg`} alt="" />
+    <div className="flex flex-col items-center gap-1">
+      <picture className="w-20 h-20 sm:w-30 sm:h-30 overflow-hidden rounded-full border-3 sm:border-4 border-amber-950">
+        <img className="scale-115 w-full object-cover" src={`/avatars/${player.avatar}.svg`} alt="" />
       </picture>
-      <h3>{player.nickname}</h3>
+      <h3 className="text-xl">{player.nickname}</h3>
     </div>
   );
 };

@@ -35,7 +35,7 @@ const JoinRoom = () => {
          const newPLayer = await createPlayer({nickname: player.nickname, avatar: player.avatar, score: player.score, roomId: code})
         await setPlayer({...player, id: newPLayer.id})
         await setRoom({room})
-        navigate(`/lobby/${code}`)
+        navigate(`/lobby/${code.toUpperCase()}`)
       }else{
         setRoomFull(true)
       }
