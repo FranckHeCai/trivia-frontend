@@ -107,15 +107,17 @@ const Leaderboard = () => {
             </div>
           ))}
         </div>
-
-      <div className="mt-3 flex flex-col sm:flex-row justify-center gap-2 sm:gap-4">
-        <button onClick={handleResetGame} className="border-2 border-amber-900 px-8 py-2 text-sm sm:text-lg text-white bg-amber-600/80 active:bg-lime-500 active:border-lime-800 rounded">
-          Volver a jugar
-        </button>
-        <button onClick={handleFinishGame} className="border-2 border-amber-900 px-8 py-2 text-sm sm:text-lg text-white bg-amber-600/80 active:bg-lime-500 active:border-lime-800 rounded">
-          Terminar
-        </button>
-      </div>
+        { player.isHost && 
+          <div className="mt-3 flex flex-col sm:flex-row justify-center gap-2 sm:gap-4">
+            <button onClick={handleResetGame} className="border-2 border-amber-900 px-8 py-2 text-sm sm:text-lg text-white bg-amber-600/80 active:bg-lime-500 active:border-lime-800 rounded">
+              Volver a jugar
+            </button>
+            <button onClick={handleFinishGame} className="border-2 border-amber-900 px-8 py-2 text-sm sm:text-lg text-white bg-amber-600/80 active:bg-lime-500 active:border-lime-800 rounded">
+              Terminar
+            </button>
+          </div>
+        }
+        
       </div>
       
     </div>

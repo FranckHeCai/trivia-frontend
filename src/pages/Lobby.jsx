@@ -102,12 +102,15 @@ const Lobby = () => {
   return (
     <div className="w-full h-screen flex flex-col gap-5 sm:gap-10 justify-center items-center p-2">
       <div className="w-full sm:w-sm">
-        <div className="p-3 sm:w-sm bg-white/90 rounded-md shadow-md relative">
+        <div className="p-3 bg-white/90 rounded-md shadow-md relative">
           <h1 className="text-sm sm:text-base font-light text-center text-black/50">Código de sala</h1>
           <button onClick={(event)=>{handleCopyCode(event)}} className="text-2xl sm:text-4xl text-center block mx-auto cursor-pointer">{roomCode}</button>
-          <button onClick={handleSettings} className="absolute top-3 right-3 text-black/50 cursor-pointer">
-            <SettingIcon />
-          </button>
+          { player.isHost && 
+            <button onClick={handleSettings} className="absolute top-3 right-3 text-black/50 cursor-pointer">
+              <SettingIcon />
+            </button>
+          }
+          
         </div>
         {/* <p className="mt-3 text-sm sm:text-lg text-center">jugadores en sala: {roomPlayers.length}/{maxPlayers}</p> */}
       </div>

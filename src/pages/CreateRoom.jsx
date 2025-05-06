@@ -28,6 +28,11 @@ const CreateRoom = () => {
     
     const maxPlayers = Number(event.target.maxPlayers.value)
     const maxQuestions = Number(event.target.maxQuestions.value)
+    const newPlayer = {
+      ...player,
+      isHost: true
+    }
+    console.log(newPlayer)
     await setRoom({
       code: roomCode,
       isReady: false,
@@ -37,7 +42,7 @@ const CreateRoom = () => {
     const playerId = await createRoom({
       code: roomCode,
       isReady: false,
-      player : {...player, isHost: true},
+      player : newPlayer,
       maxPlayers: maxPlayers,
       maxQuestions: maxQuestions,
     })
