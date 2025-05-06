@@ -1,13 +1,18 @@
 import { useNavigate } from "react-router-dom";
 import { useTriviaStore } from "../store/store";
 import BackButton from "../components/BackButton";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const Welcome = () => {
   const { player, setPlayer } = useTriviaStore(state => state)
   const [isPopupOpen, setIsPopupOpen] = useState(false);
 
   const navigate = useNavigate()
+
+  useEffect(() => {
+    setPlayer({...player, score:0})
+  }, [])
+  
 
   const handleClick = (route) => {
     navigate(`/${route}`)

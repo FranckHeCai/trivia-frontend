@@ -74,38 +74,48 @@ const Leaderboard = () => {
         dark:[&::-webkit-scrollbar-track]:bg-amber-700
         dark:[&::-webkit-scrollbar-thumb]:bg-amber-500"
         >
-          {sortedPlayers.map((player, index) => (
-            <div
-              key={player.nickname}
-              className={`flex flex-col items-center p-2 sm:p-0 sm:pr-3 sm:flex-row sm:items-center sm:justify-between mb-3.5 rounded-lg text-lg shadow-sm border-3 overflow-hidden
-                ${index === 0
-                    ? 'border-amber-400'
-                    : index === 1
-                      ? 'border-slate-400'
-                      : index === 2
-                        ? 'border-amber-700'
-                        : 'border-black'
-                }
-                `}
-            >
-              <div className="flex flex-col sm:gap-2 sm:flex-row  justify-center items-center text-center ">
-                <div className="flex relative">
-                  <picture className="w-19 h-19 relative rounded-full sm:rounded-none overflow-hidden">
-                    <img
-                      src={`/avatars/${player.avatar}.svg`}
-                      alt={player.avatar}
-                      className="w-full scale-108"
-                    />
-                  </picture>
-                  { index === 0 &&
-                    <img className="z-10 absolute top-0 left-6 w-7" src={crownIcon} alt="crown logo" />
-                  }
+          {sortedPlayers.map((player, index) => {
+            const rank =
+              index > 0 && sortedPlayers[index].score === sortedPlayers[index - 1].score
+                ? index
+                : index + 1;
+
+            const borderColor =
+              rank === 1
+                ? 'border-amber-400'
+                : rank === 2
+                ? 'border-slate-400'
+                : rank === 3
+                ? 'border-amber-700'
+                : 'border-black';
+            return (
+              <div
+                key={player.nickname}
+                className={`flex flex-col items-center p-2 sm:p-0 sm:pr-3 sm:flex-row sm:items-center sm:justify-between mb-3.5 rounded-lg text-lg shadow-sm border-3 overflow-hidden ${borderColor}`}
+              >
+                <div className="flex flex-col sm:gap-2 sm:flex-row justify-center items-center text-center">
+                  <div className="flex relative">
+                    <picture className="w-19 h-19 relative rounded-full sm:rounded-none overflow-hidden">
+                      <img
+                        src={`/avatars/${player.avatar}.svg`}
+                        alt={player.avatar}
+                        className="w-full scale-108"
+                      />
+                    </picture>
+                    {rank === 1 && (
+                      <img
+                        className="z-10 absolute top-0 left-6 w-7"
+                        src={crownIcon}
+                        alt="crown logo"
+                      />
+                    )}
+                  </div>
+                  <span className="text-sm sm:text-xl">{player.nickname}</span>
                 </div>
-                <span className="text-sm sm:text-xl">{player.nickname}</span>
+                <span className="text-sm sm:text-lg">{player.score} ptos</span>
               </div>
-              <span className="text-sm sm:text-lg">{player.score} ptos</span>
-            </div>
-          ))}
+            );
+          })}
         </div>
         { player.isHost && 
           <div className="mt-3 flex flex-col sm:flex-row justify-center gap-2 sm:gap-4">

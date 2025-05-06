@@ -28,8 +28,8 @@ function App() {
               <Route path="/questions/:roomId" element={<Questions />} />
               <Route path="/lobby/:roomCode" element={<Lobby />} />
               <Route path="/game/:roomId" element={<Game />} />
-              <Route path="/end/:roomId" element={<Leaderboard />} />
             </Route>
+              <Route path="/end/:roomId" element={<Leaderboard />} />
 
             <Route path="*" element={<Error />} />
         </Routes>
