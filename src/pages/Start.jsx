@@ -31,14 +31,14 @@ const Start = () => {
       {/* <h1 className="text-center text-lg sm:text-xl md:text-3xl font-medium">Super Trivia Party</h1> */}
       <div className="w-full max-w-3xl flex flex-col justify-center items-center">
         <picture>
-          <img className="w-2/3 mx-auto" src="/logo.png" alt="logo icon" />
+          <img className="w-1/2 sm:w-1/3 mx-auto" src="/logo.png" alt="logo icon" />
         </picture>
         {/* <picture>
           <img className="w-sm" src="/thumbnail.png" alt="" />
         </picture> */}
       </div>
       <div 
-        className="w-full max-w-4xl flex flex-col justify-center"
+        className="w-full sm:max-w-2/3 flex flex-col justify-center"
       >
         <form onSubmit={(event) => {
          handleSubmit(event)

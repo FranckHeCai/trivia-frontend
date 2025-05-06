@@ -34,15 +34,15 @@ const CreateRoom = () => {
       maxPlayers: maxPlayers,
       maxQuestions: maxQuestions
     })
-    const createdRoom = await createRoom({
+    const playerId = await createRoom({
       code: roomCode,
       isReady: false,
-      player : player,
+      player : {...player, isHost: true},
       maxPlayers: maxPlayers,
       maxQuestions: maxQuestions,
     })
-    console.log("Id del player: ", createdRoom)
-    await setPlayer({...player, id: createdRoom.id, roomId: roomCode})
+    console.log("Id del player: ", playerId)
+    await setPlayer({...player, id: playerId.id, roomId: roomCode, isHost: true})
     navigate(`/lobby/${roomCode}`)
 
   }
